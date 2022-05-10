@@ -25,11 +25,13 @@ npm run serve
 ```
 # Deployment
 
-TBD, weil aws Instanz gerade nicht gestartet werden kann..Support wurde kontaktiert.
+[WS-Server](http://ec2-3-70-217-223.eu-central-1.compute.amazonaws.com/)
+
+Passwort-gesichert!
 
 # Timetracker
 
-Issue 1: 34h 
+Issue 1: 36h 
 
 Issue 2: Xh
 
