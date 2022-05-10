@@ -1,0 +1,133 @@
+@charset "UTF-8";
+/* Farben
+---------------------------------------------------------------------------- */
+/* Viewports
+---------------------------------------------------------------------------- */
+/* Größen und Abstände
+---------------------------------------------------------------------------- */
+/* Entlang folgender Reihe
+0.2
+0.6
+0.75
+1
+1.25
+1.4
+1.6
+1.8
+2.24
+
+*/
+/* Texte */
+/* Schriften
+---------------------------------------------------------------------------- */
+/* Schriftgewichte
+---------------------------------------------------------------------------- */
+/* Zeilenabstände
+---------------------------------------------------------------------------- */
+/* Animationen (Entlang der Fibonacci Reihe)
+---------------------------------------------------------------------------- */
+/* Kacheln
+---------------------------------------------------------------------------- */
+/* Levels (z-Index)
+---------------------------------------------------------------------------- */
+/* Schatten
+---------------------------------------------------------------------------- */
+/* Opacity
+---------------------------------------------------------------------------- */
+/* Misc
+---------------------------------------------------------------------------- */
+/* Adaptive Values
+---------------------------------------------------------------------------- */
+:root {
+  --responsive-padding-top: 0.9rem;
+  --responsive-padding-top-inner: 0.72rem;
+  --responsive-padding-right-left: 0.9rem;
+  --responsive-padding-bottom: 1.08rem;
+  --responsive-padding-bottom-inner: 0.9rem;
+  --responsive-gap: 0.9rem;
+}
+@media only screen and (min-width: 1440px) {
+  :root {
+    --responsive-padding-top: 1.62rem;
+    --responsive-padding-top-inner: 1.26rem;
+    --responsive-padding-right-left: 1.62rem;
+    --responsive-padding-bottom: 2.34rem;
+    --responsive-padding-bottom-inner: 1.26rem;
+    --responsive-gap: 1.26rem;
+  }
+}
+@media only screen and (min-width: 1800px) {
+  :root {
+    --responsive-padding-top: 2.34rem;
+    --responsive-padding-top-inner: 1.62rem;
+    --responsive-padding-right-left: 2.34rem;
+    --responsive-padding-bottom: 2.34rem;
+    --responsive-padding-bottom-inner: 1.62rem;
+    --responsive-gap: 1.62rem;
+  }
+}
+
+i.icon {
+  display: inline-block;
+  width: auto;
+  height: auto;
+  margin-right: 0.5rem;
+  direction: ltr;
+  font-family: "MaterialIcons";
+  font-feature-settings: "liga";
+  font-size: 24px;
+  /* Preferred icon size */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-style: normal;
+  font-weight: normal;
+  letter-spacing: normal;
+  line-height: inherit;
+  text-rendering: optimizeLegibility;
+  text-transform: none;
+  vertical-align: middle;
+  white-space: nowrap;
+  word-wrap: normal;
+}
+i.icon.i12::before {
+  font-size: 12px !important;
+}
+i.icon.i14::before {
+  font-size: 14px !important;
+}
+i.icon.i18::before {
+  font-size: 18px !important;
+}
+i.icon.i24::before {
+  font-size: 24px !important;
+}
+i.icon.i36::before {
+  font-size: 36px !important;
+}
+i.icon.i48::before {
+  font-size: 48px !important;
+}
+i.icon::before {
+  content: attr(data-icon);
+}
+i.icon.red {
+  color: red;
+}
+
+.icon {
+  font-family: "MaterialIcons";
+  text-transform: none;
+}
+
+[data-filetype=pdf] {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  margin: 5px 5px 5px 0;
+  background: url(../assets/images/icon-sprite-2021.svg) no-repeat;
+  background-position: -2400px 0;
+  transition: opacity 0.25s;
+  vertical-align: middle;
+}
+
+/*# sourceMappingURL=icons.css.map */

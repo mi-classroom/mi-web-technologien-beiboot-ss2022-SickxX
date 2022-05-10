@@ -1,0 +1,70 @@
+@charset "UTF-8";
+/* Farben
+---------------------------------------------------------------------------- */
+/* Viewports
+---------------------------------------------------------------------------- */
+/* Größen und Abstände
+---------------------------------------------------------------------------- */
+/* Entlang folgender Reihe
+0.2
+0.6
+0.75
+1
+1.25
+1.4
+1.6
+1.8
+2.24
+
+*/
+/* Texte */
+/* Schriften
+---------------------------------------------------------------------------- */
+/* Schriftgewichte
+---------------------------------------------------------------------------- */
+/* Zeilenabstände
+---------------------------------------------------------------------------- */
+/* Animationen (Entlang der Fibonacci Reihe)
+---------------------------------------------------------------------------- */
+/* Kacheln
+---------------------------------------------------------------------------- */
+/* Levels (z-Index)
+---------------------------------------------------------------------------- */
+/* Schatten
+---------------------------------------------------------------------------- */
+/* Opacity
+---------------------------------------------------------------------------- */
+/* Misc
+---------------------------------------------------------------------------- */
+/* Adaptive Values
+---------------------------------------------------------------------------- */
+:root {
+  --responsive-padding-top: 0.9rem;
+  --responsive-padding-top-inner: 0.72rem;
+  --responsive-padding-right-left: 0.9rem;
+  --responsive-padding-bottom: 1.08rem;
+  --responsive-padding-bottom-inner: 0.9rem;
+  --responsive-gap: 0.9rem;
+}
+@media only screen and (min-width: 1440px) {
+  :root {
+    --responsive-padding-top: 1.62rem;
+    --responsive-padding-top-inner: 1.26rem;
+    --responsive-padding-right-left: 1.62rem;
+    --responsive-padding-bottom: 2.34rem;
+    --responsive-padding-bottom-inner: 1.26rem;
+    --responsive-gap: 1.26rem;
+  }
+}
+@media only screen and (min-width: 1800px) {
+  :root {
+    --responsive-padding-top: 2.34rem;
+    --responsive-padding-top-inner: 1.62rem;
+    --responsive-padding-right-left: 2.34rem;
+    --responsive-padding-bottom: 2.34rem;
+    --responsive-padding-bottom-inner: 1.62rem;
+    --responsive-gap: 1.62rem;
+  }
+}
+
+/*# sourceMappingURL=variables.css.map */

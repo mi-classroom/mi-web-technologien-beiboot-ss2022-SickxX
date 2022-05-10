@@ -1,3 +1,4 @@
+@use "variables.scss" as vars;
 // Icons
 i.icon {
   display: inline-block;
@@ -5,7 +6,7 @@ i.icon {
   height: auto;
   margin-right: 0.5rem;
   direction: ltr;
-  font-family: $font-icons;
+  font-family: vars.$font-icons;
   font-feature-settings: 'liga';
   font-size: 24px;  /* Preferred icon size */
   -webkit-font-smoothing: antialiased;
@@ -32,7 +33,7 @@ i.icon {
 
 //.icon Font Awesome Extend
 .icon {
-  font-family: $font-icons;
+  font-family: vars.$font-icons;
   text-transform: none;
 }
 
