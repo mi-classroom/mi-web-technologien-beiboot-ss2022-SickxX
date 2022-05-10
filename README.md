@@ -7,11 +7,30 @@ Als organisatorischen Rahmen für das Projekt nutzen wir GitHub Classroom. Inhal
 
 # Setup
 
-xx
+das Projekt clonen mit:
+```sh
+git clone https://github.com/mi-classroom/mi-web-technologien-beiboot-ss2022-SickxX.git
+```
+Dann die folgenden Befehle für den Development Server ausführen:
+
+Im Repoordner
+```sh
+cd frontend
+```
+```sh
+npm install
+```
+```sh
+npm run serve
+```
+# Deployment
+
+TBD, weil aws Instanz gerade nicht gestartet werden kann..Support wurde kontaktiert.
 
 # Timetracker
 
 Issue 1: 34h 
 
 Issue 2: Xh
+
 Issue X: Xh
