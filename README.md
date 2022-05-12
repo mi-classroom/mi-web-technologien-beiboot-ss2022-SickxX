@@ -6,15 +6,23 @@ Als organisatorischen Rahmen für das Projekt nutzen wir GitHub Classroom. Inhal
 
 # Ansprechpartner
 Christopher Toth
+
 # Setup
+## Requisiten:
+  - NodeJS (Versionen getestet: 16.2, 16.15), npm (8.5)
+
+  oder
+
+  - Docker
 
 das Projekt clonen mit:
 ```sh
 git clone https://github.com/mi-classroom/mi-web-technologien-beiboot-ss2022-SickxX.git
 ```
-Dann die folgenden Befehle für den Development Server ausführen:
+## Mit NodeJS und npm
+Die folgenden Befehle für den Development Server ausführen:
 
-Im Repoordner
+Im geclonten Repository
 ```sh
 cd frontend
 ```
@@ -24,6 +32,13 @@ npm install
 ```sh
 npm run serve
 ```
+## Mit Docker
+1. Docker installieren, falls noch nicht geschehen
+2. `cd frontend`
+3. Image erstellen mit: `docker build -t <IMAGENAME> . `
+4. Den Container mit dem Image starten: `docker run -p 8080:8080 --rm --name <YOUR-CONTAINERNAME> <IMAGENAME>`
+5. App ist dann im Browser unter [http://localhost:8080](http://localhost:5000) zu finden
+
 # Deployment
 
 [WS-Server](http://ec2-3-70-217-223.eu-central-1.compute.amazonaws.com/)
@@ -34,6 +49,6 @@ Passwortgesichert!
 
 Issue 1: 36h 
 
-Issue 2: Xh
+Issue 2: 1h ++
 
 Issue X: Xh
