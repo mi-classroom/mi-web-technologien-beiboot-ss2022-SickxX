@@ -41,6 +41,7 @@ npm run serve
 
 # Deployment
 AWS Kontingent läuft leider ab bei mir, daher nicht mehr erreichbar. Neues deployment folgt.
+
 [WS-Server](http://ec2-3-70-217-223.eu-central-1.compute.amazonaws.com/)
 
 Passwortgesichert!
