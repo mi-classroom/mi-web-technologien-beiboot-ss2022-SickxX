@@ -40,16 +40,14 @@ npm run serve
 5. App ist dann im Browser unter [http://localhost:8080](http://localhost:5000) zu finden
 
 # Deployment
-AWS Kontingent läuft leider ab bei mir, daher nicht mehr erreichbar. Neues deployment folgt.
+Aktuell auf github-pages, da AWS-Kontingent ausgelaufen ist.
 
-[AWS-Server](http://ec2-3-70-217-223.eu-central-1.compute.amazonaws.com/)
-
-Passwortgesichert!
+https://sickxx.github.io/
 
 # Timetracker
 
 Issue 1: 36h 
 
-Issue 2: 1h ++
+Issue 2: 1h
 
 Issue X: Xh
