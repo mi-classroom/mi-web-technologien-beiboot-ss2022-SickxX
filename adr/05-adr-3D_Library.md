@@ -21,7 +21,7 @@ Status: [accepted]
     - three.js
     - babylon.js mit vue-babylonjs
     - gsap
-    - wrapper
+    - wrapper für three.js:
       - VueGL: three.js und vue.js
       - trois.js: three.js, vue.js, Vite.js
     
@@ -33,6 +33,8 @@ Status: [accepted]
 - Solution
 
   - Da mit keinen dieser Libraries expertise vorhanden ist, fällt die Auswahl erstmal auf VueGL mit dem populären und viel genutzten three.js. VueGL verbindet Vue.js und three.js miteinander und macht die Handhabung somit leichter. Trois.js benutzt noch vite.js, was ich aktuell nicht nutze.
+
+  - EDIT: Bin auf trois.js umgestiegen, weil vue-gl nach 3 Stunden rumexperimentieren nicht laufen wollte. trois.js war nach 5 Minuten (wirklich!) importiert. 
 
 - Consequences
   - Aktuell ist meine App mit Vue gebaut, daher hoffe ich mit dem wrapper einen einfachen Einstieg in das 3D-Thema zu haben
