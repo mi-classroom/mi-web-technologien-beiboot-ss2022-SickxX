@@ -49,6 +49,10 @@ Passwortgesichert!
 
 Issue 1: 36h 
 
-Issue 2: 1h ++
+Issue 2: 1h
 
-Issue X: Xh
+Nachbereitung von Server auf gh-pages: 1h
+
+Issue 3: 6h ++
+
+Issue x: XX

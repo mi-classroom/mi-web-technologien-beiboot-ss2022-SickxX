@@ -2,7 +2,7 @@
   <router-view />
 </template>
 
-<style> /** set cda style here */
+<!-- <style> /** set cda style here */
   @import url('https://fonts.googleapis.com/css?family=Roboto');
 
   html { font-size: 22px; }
@@ -14,4 +14,4 @@
   }
 
   a:hover { color: #0074C6; }
-</style>
+</style> -->

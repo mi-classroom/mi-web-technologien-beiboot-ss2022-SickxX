@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
  <div>
     <ImageGallery />
     <ImageComponent />
@@ -6,6 +6,7 @@
 </template>
 
 <script>
+
 import ImageGallery from '../components/ImageGallery.vue';
 import ImageComponent from '@/components/ImageComponent.vue';
 
@@ -16,4 +17,4 @@ export default {
     ImageComponent,
   },
 };
-</script>
+</script> -->
