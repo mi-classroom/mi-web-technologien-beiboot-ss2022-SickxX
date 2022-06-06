@@ -125,5 +125,6 @@ dist
 data/
 
 #custom
-yarn.lock
+.frontend/yarn.lock
 package-lock.json
+yarn.lock
