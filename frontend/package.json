@@ -12,7 +12,8 @@
     "three": "^0.134.0",
     "troisjs": "^0.3.4",
     "vue": "^3.2.36",
-    "vue-router": "^4.0.3"
+    "vue-router": "^4.0.3",
+    "yarn": "^1.22.18"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
