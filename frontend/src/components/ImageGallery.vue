@@ -1,19 +1,20 @@
 <template>
 <div class="gallery">
     <renderer ref="renderer" resize="window" orbit-ctrl>
-      <Camera :position="{ x:15, y: 15, z: 15 }" />
+      <Camera :position="{ x:15, y: 15, z: 1590 }" />
 
         <Scene ref="scene" background="#ff1970">
 
-          <Box ref="box" v-for="i in n"
-              :key="i"
-              :position="{x:10, y:10, z: i}"
-              :size="1"
+          <Box ref="box" v-for="image in isBestOfImageFilter"
+              :key="image.sortingNumber"
+              :position="{x:10, y:10, z:image.sortingNumber.slice(0,4)}"  
+              :size="2"
               >
-            <!-- <router-link :to="`/image/${image.sortingNumber}`"> -->
-            <!-- <img :src="getSourcePath(image)"> -->
-            <BasicMaterial color="#ffffff"/>
-            <!-- </router-link> -->
+            <BasicMaterial>
+              <Texture :src="getSourcePath(image)" /> 
+            </BasicMaterial>
+
+          <!-- <router-link :to="`/image/${image.sortingNumber}`"> <img :src="getSourcePath(image)"></router-link> -->
           </Box>
         </Scene>
 
@@ -22,78 +23,90 @@
 </template>
 
 <script>
-// import imgData from '@/data/cda-paintings-2022-04-22.de.json';
-// let testImgData = {"items": []};
-const n = 30;
+ import imgData from '@/data/cda-paintings-2022-04-22.de.json';
+ let timelineStart = 1500;
+ let timelineEnd = 1570;
 
 export default {
   name: 'ImageGallery',
   data() {
     return {
-      n,
+      imgData,
+      timelineStart,
+      timelineEnd,
     };
   },
   // mounted() {
 
   // },
-  // computed: {
-  //   isBestOfImageFilter() {
-  //     let filteredImgData = {"items": []};
-  //     for (let i = 0; i < this.imgData.items.length; i++) {
-  //       if(this.imgData.items[i].isBestOf) {
-  //         filteredImgData.items.push(this.imgData.items[i]);
-  //       }
-  //     }
+  computed: {
+    isBestOfImageFilter() {
 
-  //     filteredImgData.items.sort(function(a, b){
+      let filteredImgData = {"items": [], "posis": []};
 
-  //      let year1 = a.sortingNumber.match(/([0-9]{4})/gm);
-  //      let year2 = b.sortingNumber.match(/([0-9]{4})/gm);
-  //      let firstPosition1 = a.sortingNumber.match(/\w{3}$/gm);
-  //      let firstPosition2 = b.sortingNumber.match(/\w{3}$/gm);
-  //      let secondPosition1 = a.sortingNumber.match(/\w{2}$/gm);
-  //      let secondPosition2 = b.sortingNumber.match(/\w{2}$/gm);
+      
+      //If Image is in BestOf, add to items
+      for (let i = 0; i < this.imgData.items.length; i++) {
+        if(this.imgData.items[i].isBestOf) {
+          let itemPosition = { "ItemName"  :  "", "x" :  15, "y" :  15, "z" :  15 }
+          filteredImgData.items.push(this.imgData.items[i]);
+          itemPosition.ItemName = this.imgData.items[i].metadata.title;
+          filteredImgData.posis.push(itemPosition);
+        }
+      }
+      //korospondierendes array "posis" muss auch sortet sein? bzw. mit was wird verbindung hergestellt?
+      // posi array erst nach dem sort über schleife füllen? dann ist der Index gleich?
+      filteredImgData.items.sort(function(a, b){
 
-  //       if (Number(year1) === Number(year2)) {
-  //             //console.log("TEST in Year IF: " + a.sortingNumber.match(/([0-9]{4})/gm ).toString());
-  //               if (a.sortingNumber.match(/-\w{3}$/gm) 
-  //                   && b.sortingNumber.match(/-\w{3}$/gm)) {
-  //                 //console.log("Test in Position IF: " + a.sortingNumber.match(/-\w{3}$/gm).toString());
-  //                   return firstPosition1 - firstPosition2;
-  //               } 
-  //               else if (a.sortingNumber.match(/-\w{2}$/gm) 
-  //                       && b.sortingNumber.match(/-\w{2}$/gm && a.sortingNumber.match(/[-](\d{3})/g).toString().slice(1) === b.sortingNumber.match(/[-](\d{3})/g).toString().slice(1)) 
-  //                       ) {
-  //                         return secondPosition1 - secondPosition2;
+       let year1 = a.sortingNumber.match(/([0-9]{4})/gm);
+       let year2 = b.sortingNumber.match(/([0-9]{4})/gm);
+       let firstPosition1 = a.sortingNumber.match(/\w{3}$/gm);
+       let firstPosition2 = b.sortingNumber.match(/\w{3}$/gm);
+       let secondPosition1 = a.sortingNumber.match(/\w{2}$/gm);
+       let secondPosition2 = b.sortingNumber.match(/\w{2}$/gm);
 
-  //                     } else {
-  //                       //zurück zur position1
-  //                        //console.log("3er gleich, 2er nicht: a= " + a.sortingNumber.match(/[-](\d{3})/g).toString().slice(1) + " b= " + b.sortingNumber.match(/[-](\d{3})/g).toString().slice(1) );
-  //                         return a.sortingNumber.match(/[-](\d{3})/g).toString().slice(1)
-  //                           - b.sortingNumber.match(/[-](\d{3})/g).toString().slice(1);
-  //                     }
+        if (Number(year1) === Number(year2)) {
+              //Jahr ist bei beiden Items gleich
+                if (a.sortingNumber.match(/-\w{3}$/gm) 
+                    && b.sortingNumber.match(/-\w{3}$/gm)) {
+                    //check auf die erste Posi-nummer. -> IF negative Value: x oder z posi des items b  = +2, else a
+                    if (firstPosition1 - firstPosition2 < 0){
+                      console.log("Test für Posi: Negativ - " );
+                    } else {
+                      console.log("Test für Posi: Positiv - " );
+                    }
+                    return firstPosition1 - firstPosition2;
+                } 
+                else if (a.sortingNumber.match(/-\w{2}$/gm) 
+                        && b.sortingNumber.match(/-\w{2}$/gm && a.sortingNumber.match(/[-](\d{3})/g).toString().slice(1) === b.sortingNumber.match(/[-](\d{3})/g).toString().slice(1)) 
+                        ) {
+                          //Check auf zweite Posi-nummer, wenn erste Posi-nummer gleich ist ->IF negative Value: x oder z des items b = +2, else items a
+                          return secondPosition1 - secondPosition2;
 
-  //           }
-  //       return year1 - year2;
-  //     });
-  //     return filteredImgData.items;
-  //   },
-  //   testData () {
-  //     console.log("TESTFUNC: ");
-  //   for (let i = 0; i < this.imgData.items.length; i++) {
-  //       if(this.imgData.items[i].isBestOf) {
-  //         testImgData.items.push(this.imgData.items[i]);
-  //       }
-  //     }
-  // return testImgData;
-  //   },
-  // },
-  // methods: {
-  //   getSourcePath(filteredImage) {
-  //     let src = filteredImage.images.overall.images[0].sizes.xsmall.src;
-  //     return src;
-  //   },
-  // },
+                      } else {
+                        //Sonst check auf erste Posi-nummer, welche zweite Posi-nummer enthält -> IF negative Value: x oder z des items b = +2, else items a
+                          return a.sortingNumber.match(/[-](\d{3})/g).toString().slice(1)
+                            - b.sortingNumber.match(/[-](\d{3})/g).toString().slice(1);
+                      }
+
+            }
+        // Sonst ist das Jahr nicht gleich und wird auf Zeitachse sortiert
+        return year1 - year2;
+      });
+      console.log(filteredImgData);
+      return filteredImgData.items;
+    },
+  },
+  methods: {
+    getSourcePath(filteredImage) {
+      // console.log("Time: " + filteredImage.sortingNumber);
+      let proxyServerSubString = "https://lucascranach.org/data-proxy/image.php?subpath=/";
+      let imageServer = filteredImage.images.overall.images[0].sizes.xsmall.src;
+      let imgPathString = imageServer.slice(42,200);
+      let proxyServerFullString = proxyServerSubString + imgPathString;
+      return proxyServerFullString;
+    },
+  },
 };
 </script>
 
@@ -113,6 +126,10 @@ export default {
     object-fit: cover;
     border-radius: 0.75rem;
   } */
+
+  /* canvas {
+  display: block;
+} */
 </style>
 <!-- 
 <template>

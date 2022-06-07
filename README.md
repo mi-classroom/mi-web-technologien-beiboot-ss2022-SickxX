@@ -53,6 +53,6 @@ Issue 2: 1h
 
 Nachbereitung von Server auf gh-pages: 1h
 
-Issue 3: 8h ++
+Issue 3: 12h ++
 
 Issue x: XX
