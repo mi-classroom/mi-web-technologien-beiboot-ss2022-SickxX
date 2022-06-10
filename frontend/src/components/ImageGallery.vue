@@ -1,21 +1,23 @@
 <template>
 <div class="gallery">
     <renderer ref="renderer" resize="window" orbit-ctrl>
-      <Camera :position="{ x:15, y: 15, z: 1590 }" />
+      <Camera :position="{ x:15, y: 15, z: 1590 }" :zoom="0.5" />
 
-        <Scene ref="scene" background="#ff1970">
+        <Scene ref="scene" background="#d3d3d3">
 
-          <Box ref="box" v-for="image in isBestOfImageFilter"
+          
+          <Box ref="box" v-for="image in isBestOfImageFilter.items"
               :key="image.sortingNumber"
-              :position="{x:10, y:10, z:image.sortingNumber.slice(0,4)}"  
+              :position="{x:image.coords.x, y:image.coords.y, z:image.coords.z}"
               :size="2"
               >
-            <BasicMaterial>
-              <Texture :src="getSourcePath(image)" /> 
+            <BasicMaterial :props="{ transparent: true, opacity: 0.5 }">
+              <Texture :src="getSourcePath(image)"/> 
             </BasicMaterial>
 
           <!-- <router-link :to="`/image/${image.sortingNumber}`"> <img :src="getSourcePath(image)"></router-link> -->
           </Box>
+
         </Scene>
 
     </renderer>
@@ -42,22 +44,22 @@ export default {
   computed: {
     isBestOfImageFilter() {
 
-      let filteredImgData = {"items": [], "posis": []};
+      let filteredImgData = {"items": []};
+      filteredImgData = JSON.parse(JSON.stringify(filteredImgData));
 
       
-      //If Image is in BestOf, add to items
       for (let i = 0; i < this.imgData.items.length; i++) {
         if(this.imgData.items[i].isBestOf) {
-          let itemPosition = { "ItemName"  :  "", "x" :  15, "y" :  15, "z" :  15 }
           filteredImgData.items.push(this.imgData.items[i]);
-          itemPosition.ItemName = this.imgData.items[i].metadata.title;
-          filteredImgData.posis.push(itemPosition);
         }
       }
-      //korospondierendes array "posis" muss auch sortet sein? bzw. mit was wird verbindung hergestellt?
-      // posi array erst nach dem sort über schleife füllen? dann ist der Index gleich?
-      filteredImgData.items.sort(function(a, b){
+      for (let i = 0; i < filteredImgData.items.length; i++) {
+        let itemPosition = {"x" :  10, "y" :  10, "z" :  filteredImgData.items[i].sortingInfo.year };
+          filteredImgData.items[i].coords = itemPosition;
+      }
 
+      filteredImgData.items.sort(function(a, b){
+      
        let year1 = a.sortingNumber.match(/([0-9]{4})/gm);
        let year2 = b.sortingNumber.match(/([0-9]{4})/gm);
        let firstPosition1 = a.sortingNumber.match(/\w{3}$/gm);
@@ -69,37 +71,42 @@ export default {
               //Jahr ist bei beiden Items gleich
                 if (a.sortingNumber.match(/-\w{3}$/gm) 
                     && b.sortingNumber.match(/-\w{3}$/gm)) {
-                    //check auf die erste Posi-nummer. -> IF negative Value: x oder z posi des items b  = +2, else a
-                    if (firstPosition1 - firstPosition2 < 0){
-                      console.log("Test für Posi: Negativ - " );
-                    } else {
-                      console.log("Test für Posi: Positiv - " );
-                    }
+                    //check auf die erste Posi-nummer
                     return firstPosition1 - firstPosition2;
                 } 
                 else if (a.sortingNumber.match(/-\w{2}$/gm) 
-                        && b.sortingNumber.match(/-\w{2}$/gm && a.sortingNumber.match(/[-](\d{3})/g).toString().slice(1) === b.sortingNumber.match(/[-](\d{3})/g).toString().slice(1)) 
-                        ) {
-                          //Check auf zweite Posi-nummer, wenn erste Posi-nummer gleich ist ->IF negative Value: x oder z des items b = +2, else items a
+                        && b.sortingNumber.match(/-\w{2}$/gm) && a.sortingNumber.match(/[-](\d{3})/g).toString().slice(1) === b.sortingNumber.match(/[-](\d{3})/g).toString().slice(1)) 
+                         {
+                          //Check auf zweite Posi-nummer, wenn erste Posi-nummer gleich ist
                           return secondPosition1 - secondPosition2;
-
                       } else {
-                        //Sonst check auf erste Posi-nummer, welche zweite Posi-nummer enthält -> IF negative Value: x oder z des items b = +2, else items a
-                          return a.sortingNumber.match(/[-](\d{3})/g).toString().slice(1)
-                            - b.sortingNumber.match(/[-](\d{3})/g).toString().slice(1);
+                        //Sonst check auf erste Posi-nummer, welche zweite Posi-nummer enthält
+                        return a.sortingNumber.match(/[-](\d{3})/g).toString().slice(1) - b.sortingNumber.match(/[-](\d{3})/g).toString().slice(1);
                       }
 
             }
-        // Sonst ist das Jahr nicht gleich und wird auf Zeitachse sortiert
         return year1 - year2;
       });
+      
+
+      for (let i = 0; i < filteredImgData.items.length -1; i++) {
+        if(Number(filteredImgData.items[i].sortingNumber.match(/([0-9]{4})/gm)) === Number(filteredImgData.items[i+1].sortingNumber.match(/([0-9]{4})/gm))){
+          filteredImgData.items[i+1].coords.x = filteredImgData.items[i].coords.x + 5;
+          console.log("TEST in IF: " + filteredImgData.items[i].coords.x);
+        } else {
+         // filteredImgData.items[i].coords.z = filteredImgData.items[i].coords.z + 5;
+        }
+
+      }
       console.log(filteredImgData);
-      return filteredImgData.items;
+      
+
+
+      return filteredImgData;
     },
   },
   methods: {
     getSourcePath(filteredImage) {
-      // console.log("Time: " + filteredImage.sortingNumber);
       let proxyServerSubString = "https://lucascranach.org/data-proxy/image.php?subpath=/";
       let imageServer = filteredImage.images.overall.images[0].sizes.xsmall.src;
       let imgPathString = imageServer.slice(42,200);
