@@ -1,33 +1,35 @@
 <template>
 <div class="gallery">
-    <renderer ref="renderer" resize="window" orbit-ctrl>
-      <Camera :position="{ x:15, y: 15, z: 1590 }" :zoom="0.5" />
-
+    <Renderer ref="renderer" resize="window" orbitCtrl antialias>
+      <Camera ref ="camera" :position="{ x: 15, y:  15, z: 1700 }" />
+    
         <Scene ref="scene" background="#d3d3d3">
 
-          
           <Box ref="box" v-for="image in isBestOfImageFilter.items"
               :key="image.sortingNumber"
-              :position="{x:image.coords.x, y:image.coords.y, z:image.coords.z}"
-              :size="2"
-              >
-            <BasicMaterial :props="{ transparent: true, opacity: 0.5 }">
+              :position="{x:image.coords.x, y:image.coords.y, z: image.coords.z}"
+              :scale="{x: getScaleX(image), y: getScaleY(image), z: getScaleZ(image)}"
+              @click="onEvent(image.sortingNumber)"
+              ><!--Dimensionen des Bildes an x und y übergeben -->
+              
+            <BasicMaterial>
               <Texture :src="getSourcePath(image)"/> 
             </BasicMaterial>
-
-          <!-- <router-link :to="`/image/${image.sortingNumber}`"> <img :src="getSourcePath(image)"></router-link> -->
           </Box>
+          <Plane :height="180" :width="80" :rotation="{x: -Math.PI/2, y: 0, z: 0}" :position="{x:15, y: 10, z: 1590}" > <BasicMaterial color="#444a47" ></BasicMaterial> </Plane>
 
         </Scene>
 
-    </renderer>
+    </Renderer>
 </div>
 </template>
 
 <script>
  import imgData from '@/data/cda-paintings-2022-04-22.de.json';
+  
  let timelineStart = 1500;
  let timelineEnd = 1570;
+
 
 export default {
   name: 'ImageGallery',
@@ -38,9 +40,15 @@ export default {
       timelineEnd,
     };
   },
-  // mounted() {
+  mounted() {
+    const orbitCtrl = this.$refs.renderer.three.cameraCtrl;
+    orbitCtrl.enabled = true;
+    orbitCtrl.panSpeed = 0.05;
+    orbitCtrl.rotateSpeed = 0.05;
+    orbitCtrl.zoomSpeed = 0.03;
+    orbitCtrl.update();
+   },
 
-  // },
   computed: {
     isBestOfImageFilter() {
 
@@ -54,7 +62,7 @@ export default {
         }
       }
       for (let i = 0; i < filteredImgData.items.length; i++) {
-        let itemPosition = {"x" :  10, "y" :  10, "z" :  filteredImgData.items[i].sortingInfo.year };
+        let itemPosition = {"x" :  10, "y" :  10.5, "z" :  filteredImgData.items[i].sortingInfo.year };
           filteredImgData.items[i].coords = itemPosition;
       }
 
@@ -88,30 +96,48 @@ export default {
         return year1 - year2;
       });
       
-
       for (let i = 0; i < filteredImgData.items.length -1; i++) {
         if(Number(filteredImgData.items[i].sortingNumber.match(/([0-9]{4})/gm)) === Number(filteredImgData.items[i+1].sortingNumber.match(/([0-9]{4})/gm))){
           filteredImgData.items[i+1].coords.x = filteredImgData.items[i].coords.x + 5;
-          console.log("TEST in IF: " + filteredImgData.items[i].coords.x);
         } else {
-         // filteredImgData.items[i].coords.z = filteredImgData.items[i].coords.z + 5;
+            filteredImgData.items[i+1].coords.z = filteredImgData.items[i+1].coords.z + i;
         }
 
       }
       console.log(filteredImgData);
-      
-
-
       return filteredImgData;
     },
   },
   methods: {
     getSourcePath(filteredImage) {
       let proxyServerSubString = "https://lucascranach.org/data-proxy/image.php?subpath=/";
-      let imageServer = filteredImage.images.overall.images[0].sizes.xsmall.src;
+      let imageServer = filteredImage.images.overall.images[0].sizes.medium.src;
       let imgPathString = imageServer.slice(42,200);
       let proxyServerFullString = proxyServerSubString + imgPathString;
       return proxyServerFullString;
+    },
+    onEvent(imgSortNumb) {
+      this.$router.push('/image/' + imgSortNumb);
+    },
+    getScale(image) {
+      //Hier kommen die Dimensions-Berechnungen hin!
+       console.log(image);
+      return;
+    },
+    getScaleX(image){
+      let x = 2;
+      this.getScale(image);
+      return x;
+    },
+    getScaleY(image){
+      let y = 2;
+      this.getScale(image);
+      return y;
+    },
+    getScaleZ(image){
+      let z = 0.01;
+      this.getScale(image);
+      return z;
     },
   },
 };
@@ -138,27 +164,3 @@ export default {
   display: block;
 } */
 </style>
-<!-- 
-<template>
-  <Renderer ref="renderer">
-    <Camera :position="{ x:0, y: 0, z: 5 }" />
-    <Scene>
-      <SpotLight :position="{ y: 50, z: 50 }" />
-      <Box ref="box">
-        <BasicMaterial />
-      </Box>
-    </Scene>
-  </Renderer>
-</template>
-
-<script>
-export default {
-  mounted() {
-    const renderer = this.$refs.renderer;
-    const box = this.$refs.box.mesh;
-    renderer.onBeforeRender(() => {
-      box.rotation.x += 0.01;
-    });
-  },
-};
-</script> -->
