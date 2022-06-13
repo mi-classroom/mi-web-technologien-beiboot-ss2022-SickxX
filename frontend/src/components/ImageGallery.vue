@@ -1,5 +1,9 @@
 <template>
+
 <div class="gallery">
+
+  
+   
     <Renderer ref="renderer" resize="window" orbitCtrl antialias>
       <Camera ref ="camera" :position="{ x: 15, y:  15, z: 1700 }" />
     
@@ -7,29 +11,53 @@
 
           <Box ref="box" v-for="image in isBestOfImageFilter.items"
               :key="image.sortingNumber"
-              :position="{x:image.coords.x, y:image.coords.y, z: image.coords.z}"
               :scale="{x: getScaleX(image), y: getScaleY(image), z: getScaleZ(image)}"
+              :position="{x:image.coords.x, y:image.coords.y + getScaleY(image)/2 , z: image.coords.z}"
               @click="onEvent(image.sortingNumber)"
-              ><!--Dimensionen des Bildes an x und y übergeben -->
-              
+              >
+              <div id="info">Description</div>
             <BasicMaterial>
               <Texture :src="getSourcePath(image)"/> 
             </BasicMaterial>
           </Box>
-          <Plane :height="180" :width="80" :rotation="{x: -Math.PI/2, y: 0, z: 0}" :position="{x:15, y: 10, z: 1590}" > <BasicMaterial color="#444a47" ></BasicMaterial> </Plane>
 
+
+          <Box 
+          :position="{x:2, y:12, z: timelineEnd+100}"
+          :size="2"
+          >
+          <BasicMaterial color="#ffffff" >
+            <Texture  /> 
+          </BasicMaterial>
+          </Box>
+
+          <Plane :height="180" :width="120" :rotation="{x: -Math.PI/2, y: 0, z: 0}" :position="{x:50, y: 10.5, z: 1590}" > 
+          <BasicMaterial color="#444a47" > </BasicMaterial> </Plane>
+
+          <Plane ref="timePlane"
+           v-for="image in isBestOfImageFilter.items"
+           :key="image.sortingNumber"
+           :height="1" 
+           :width="120" 
+           :rotation="{x: -Math.PI/2, y: 0, z: 0}" 
+           :position="{x:50, y: 11, z: image.coords.z}" > 
+           <BasicMaterial color="#ffffff">   <Texture />  </BasicMaterial> </Plane>
+           <!-- Theoretisch könnte in diese Plane der text reinkommen zu den Jahren, mit ref und dann
+           plane.add(texture`?) -->
+            
         </Scene>
-
     </Renderer>
+    
 </div>
+
 </template>
+
 
 <script>
  import imgData from '@/data/cda-paintings-2022-04-22.de.json';
   
  let timelineStart = 1500;
  let timelineEnd = 1570;
-
 
 export default {
   name: 'ImageGallery',
@@ -42,11 +70,20 @@ export default {
   },
   mounted() {
     const orbitCtrl = this.$refs.renderer.three.cameraCtrl;
+    const plane = this.$refs.timePlane;
+
+
     orbitCtrl.enabled = true;
     orbitCtrl.panSpeed = 0.05;
     orbitCtrl.rotateSpeed = 0.05;
     orbitCtrl.zoomSpeed = 0.03;
     orbitCtrl.update();
+
+    var canvas = document.createElement("canvas");
+    var ctx = canvas.getContext("2d");
+    ctx.font = "30px Arial";
+    ctx.fillText("Hello World", 10, 50);
+    plane(ctx);
    },
 
   computed: {
@@ -98,11 +135,11 @@ export default {
       
       for (let i = 0; i < filteredImgData.items.length -1; i++) {
         if(Number(filteredImgData.items[i].sortingNumber.match(/([0-9]{4})/gm)) === Number(filteredImgData.items[i+1].sortingNumber.match(/([0-9]{4})/gm))){
-          filteredImgData.items[i+1].coords.x = filteredImgData.items[i].coords.x + 5;
-        } else {
-            filteredImgData.items[i+1].coords.z = filteredImgData.items[i+1].coords.z + i;
-        }
-
+          filteredImgData.items[i+1].coords.x = filteredImgData.items[i].coords.x + 10;
+        } 
+        
+      // filteredImgData.items[i].coords.z = filteredImgData.items[i].coords.z;
+        
       }
       console.log(filteredImgData);
       return filteredImgData;
@@ -119,20 +156,37 @@ export default {
     onEvent(imgSortNumb) {
       this.$router.push('/image/' + imgSortNumb);
     },
+    gcd (a, b) {
+      return (b == 0) ? a : this.gcd (b, a%b);
+    },
     getScale(image) {
       //Hier kommen die Dimensions-Berechnungen hin!
-       console.log(image);
-      return;
+      //CM into pixel
+      let imgMaxDimWidth = image.images.overall.infos.maxDimensions.width;
+      let imgMaxDimHeight = image.images.overall.infos.maxDimensions.height;
+      // let divisor = this.gcd(imgMaxDimWidth, imgMaxDimHeight);
+      // let aspectRatio = imgMaxDimWidth/imgMaxDimHeight;
+
+      //let stringSplit = image.dimensions.replace(/[\])}[{(]/g, ' ').split(' ');
+      // let StringCut = stringSplit.slice();
+      //let stringDigits = image.dimensions.match(/\d/g);
+
+      // console.log("NEW IMAGE: ");
+      // console.log("getScaleFunc: Width: " + imgMaxDimWidth + " Height: " + imgMaxDimHeight );
+      // console.log("getScaleFunc: Divisor: " + divisor + " AspectRatio: " + aspectRatio );
+      // console.log(image.dimensions); 
+
+
+      return [imgMaxDimWidth/1000, imgMaxDimHeight/1000];
     },
     getScaleX(image){
-      let x = 2;
+      // let x = 2;
       this.getScale(image);
-      return x;
+      return this.getScale(image)[0];
     },
     getScaleY(image){
-      let y = 2;
-      this.getScale(image);
-      return y;
+      // let y = 2;
+      return  this.getScale(image)[1];
     },
     getScaleZ(image){
       let z = 0.01;
@@ -141,6 +195,7 @@ export default {
     },
   },
 };
+
 </script>
 
 <style>
@@ -162,5 +217,14 @@ export default {
 
   /* canvas {
   display: block;
-} */
+  } */
+
+  #info {
+	position: absolute;
+	top: 100px;
+	width: 100%;
+	text-align: center;
+	z-index: 100;
+	display:block;
+}
 </style>
