@@ -2021,6 +2021,13 @@
   "resolved" "https://registry.npmjs.org/batch/-/batch-0.6.1.tgz"
   "version" "0.6.1"
 
+"bidi-js@^1.0.2":
+  "integrity" "sha512-rzSy/k7WdX5zOyeHHCOixGXbCHkyogkxPKL2r8QtzHmVQDiWCXUWa18bLdMWT9CYMLOYTjWpTHawuev2ouYJVw=="
+  "resolved" "https://registry.npmjs.org/bidi-js/-/bidi-js-1.0.2.tgz"
+  "version" "1.0.2"
+  dependencies:
+    "require-from-string" "^2.0.2"
+
 "big.js@^5.2.2":
   "integrity" "sha512-vyL2OymJxmarO8gxMr0mhChsO9QGwhynfuu4+MHTAW6czfq9humCB7rKpUjDd9YUiDPU4mzpyupFSvOClAwbmQ=="
   "resolved" "https://registry.npmjs.org/big.js/-/big.js-5.2.2.tgz"
@@ -5707,7 +5714,7 @@
     "neo-async" "^2.6.2"
     "schema-utils" "^3.0.0"
 
-"three@^0.134.0":
+"three@^0.134.0", "three@>=0.103.0":
   "integrity" "sha512-LbBerg7GaSPjYtTOnu41AMp7tV6efUNR3p4Wk5NzkSsNTBuA5mDGOfwwZL1jhhVMLx9V20HolIUo0+U3AXehbg=="
   "resolved" "https://registry.npmjs.org/three/-/three-0.134.0.tgz"
   "version" "0.134.0"
@@ -5750,6 +5757,26 @@
   "integrity" "sha1-gYT9NH2snNwYWZLzpmIuFLnZq2o="
   "resolved" "https://registry.npmjs.org/tr46/-/tr46-0.0.3.tgz"
   "version" "0.0.3"
+
+"troika-three-text@^0.46.4":
+  "integrity" "sha512-Qsv0HhUKTZgSmAJs5wvO7YlBoJSP9TGPLmrg+K9pbQq4lseQdcevbno/WI38bwJBZ/qS56hvfqEzY0zUEFzDIw=="
+  "resolved" "https://registry.npmjs.org/troika-three-text/-/troika-three-text-0.46.4.tgz"
+  "version" "0.46.4"
+  dependencies:
+    "bidi-js" "^1.0.2"
+    "troika-three-utils" "^0.46.0"
+    "troika-worker-utils" "^0.46.0"
+    "webgl-sdf-generator" "1.1.1"
+
+"troika-three-utils@^0.46.0":
+  "integrity" "sha512-llHyrXAcwzr0bpg80GxsIp73N7FuImm4WCrKDJkAqcAsWmE5pfP9+Qzw+oMWK1P/AdHQ79eOrOl9NjyW4aOw0w=="
+  "resolved" "https://registry.npmjs.org/troika-three-utils/-/troika-three-utils-0.46.0.tgz"
+  "version" "0.46.0"
+
+"troika-worker-utils@^0.46.0":
+  "integrity" "sha512-bzOx5f2ZBxkFhXtIvDJlLn2AI3bzCkGVbCndl/2dL5QZrwHEKl45OEIilCxYQQWJG1rEbOD9O80tMjoYjw19OA=="
+  "resolved" "https://registry.npmjs.org/troika-worker-utils/-/troika-worker-utils-0.46.0.tgz"
+  "version" "0.46.0"
 
 "troisjs@^0.3.4":
   "integrity" "sha512-aonG2lw+QyTjytJpvYIaGv2AiIKzm+eSYT4ByG64uVh+jCLAWxnblS6bCewIckvCMqs2j3z351Q/IFIPWYViCQ=="
@@ -5948,6 +5975,11 @@
   "version" "1.0.1"
   dependencies:
     "defaults" "^1.0.3"
+
+"webgl-sdf-generator@1.1.1":
+  "integrity" "sha512-9Z0JcMTFxeE+b2x1LJTdnaT8rT8aEp7MVxkNwoycNmJWwPdzoXzMh0BjJSh/AEFP+KPYZUli814h8bJZFIZ2jA=="
+  "resolved" "https://registry.npmjs.org/webgl-sdf-generator/-/webgl-sdf-generator-1.1.1.tgz"
+  "version" "1.1.1"
 
 "webidl-conversions@^3.0.0":
   "integrity" "sha1-JFNCdeKnvGvnvIZhHMFq4KVlSHE="

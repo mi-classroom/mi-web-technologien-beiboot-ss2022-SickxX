@@ -34,16 +34,16 @@
           <Plane :height="180" :width="120" :rotation="{x: -Math.PI/2, y: 0, z: 0}" :position="{x:50, y: 10.5, z: 1590}" > 
           <BasicMaterial color="#444a47" > </BasicMaterial> </Plane>
 
-          <Plane ref="timePlane"
+          <!-- <Plane ref="timePlane"
            v-for="image in isBestOfImageFilter.items"
            :key="image.sortingNumber"
            :height="1" 
            :width="120" 
            :rotation="{x: -Math.PI/2, y: 0, z: 0}" 
            :position="{x:50, y: 11, z: image.coords.z}" > 
-           <BasicMaterial color="#ffffff">   <Texture />  </BasicMaterial> </Plane>
-           <!-- Theoretisch könnte in diese Plane der text reinkommen zu den Jahren, mit ref und dann
-           plane.add(texture`?) -->
+           <BasicMaterial color="#ffffff">   <Texture />  </BasicMaterial> </Plane> -->
+           <Plane ref="timePlane" :height="5" :width="50" :rotation="{x: -Math.PI/2, y: 0, z: 0}" :position="{x:10, y: 11, z: timelineEnd+70}" > 
+           <BasicMaterial color="#ffffff" > </BasicMaterial> </Plane>
             
         </Scene>
     </Renderer>
@@ -55,6 +55,9 @@
 
 <script>
  import imgData from '@/data/cda-paintings-2022-04-22.de.json';
+ import {Text} from 'troika-three-text';
+ //const Text = require('troika-three-text');
+
   
  let timelineStart = 1500;
  let timelineEnd = 1570;
@@ -70,9 +73,7 @@ export default {
   },
   mounted() {
     const orbitCtrl = this.$refs.renderer.three.cameraCtrl;
-    const plane = this.$refs.timePlane;
-
-
+    
     orbitCtrl.enabled = true;
     orbitCtrl.panSpeed = 0.05;
     orbitCtrl.rotateSpeed = 0.05;
@@ -83,7 +84,10 @@ export default {
     var ctx = canvas.getContext("2d");
     ctx.font = "30px Arial";
     ctx.fillText("Hello World", 10, 50);
-    plane(ctx);
+
+    const plane = this.$refs.timePlane.three.PlaneGeometry(1,1);
+    console.log("Plane: " + plane);
+
    },
 
   computed: {
