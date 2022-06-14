@@ -5,7 +5,7 @@
   
    
     <Renderer ref="renderer" resize="window" orbitCtrl antialias>
-      <Camera ref ="camera" :position="{ x: 15, y:  15, z: 1700 }" />
+      <Camera ref ="camera" :position="{ x: 10, y:  20, z: 1600 }" />
     
         <Scene ref="scene" background="#d3d3d3">
 
@@ -15,39 +15,19 @@
               :position="{x:image.coords.x, y:image.coords.y + getScaleY(image)/2 , z: image.coords.z}"
               @click="onEvent(image.sortingNumber)"
               >
-              <div id="info">Description</div>
             <BasicMaterial>
               <Texture :src="getSourcePath(image)"/> 
             </BasicMaterial>
           </Box>
-
-
-          <Box 
-          :position="{x:2, y:12, z: timelineEnd+100}"
-          :size="2"
-          >
-          <BasicMaterial color="#ffffff" >
-            <Texture  /> 
-          </BasicMaterial>
-          </Box>
-
-          <Plane :height="180" :width="120" :rotation="{x: -Math.PI/2, y: 0, z: 0}" :position="{x:50, y: 10.5, z: 1590}" > 
+          <!-- Ground -->
+          <Plane :height="150" :width="120" :rotation="{x: -Math.PI/2, y: 0, z: 0}" :position="{x:50, y: 10.5, z: 1510}" > 
           <BasicMaterial color="#444a47" > </BasicMaterial> </Plane>
-
-          <!-- <Plane ref="timePlane"
-           v-for="image in isBestOfImageFilter.items"
-           :key="image.sortingNumber"
-           :height="1" 
-           :width="120" 
-           :rotation="{x: -Math.PI/2, y: 0, z: 0}" 
-           :position="{x:50, y: 11, z: image.coords.z}" > 
-           <BasicMaterial color="#ffffff">   <Texture />  </BasicMaterial> </Plane> -->
-           <Plane ref="timePlane" :height="5" :width="50" :rotation="{x: -Math.PI/2, y: 0, z: 0}" :position="{x:10, y: 11, z: timelineEnd+70}" > 
-           <BasicMaterial color="#ffffff" > </BasicMaterial> </Plane>
-            
+          
+          <!-- helper plane -->
+          <Plane :height="150" :width="5" :rotation="{x: -Math.PI/2, y: 0, z: 0}" :position="{x:-10, y: 10.8, z: 1510}" > 
+          <BasicMaterial color="#ffffff" > </BasicMaterial> </Plane>
         </Scene>
     </Renderer>
-    
 </div>
 
 </template>
@@ -56,8 +36,6 @@
 <script>
  import imgData from '@/data/cda-paintings-2022-04-22.de.json';
  import {Text} from 'troika-three-text';
- //const Text = require('troika-three-text');
-
   
  let timelineStart = 1500;
  let timelineEnd = 1570;
@@ -72,21 +50,18 @@ export default {
     };
   },
   mounted() {
+
     const orbitCtrl = this.$refs.renderer.three.cameraCtrl;
+    const scene = this.$refs.scene.scene;
     
     orbitCtrl.enabled = true;
     orbitCtrl.panSpeed = 0.05;
     orbitCtrl.rotateSpeed = 0.05;
     orbitCtrl.zoomSpeed = 0.03;
     orbitCtrl.update();
+    this.getTimeline(scene);
 
-    var canvas = document.createElement("canvas");
-    var ctx = canvas.getContext("2d");
-    ctx.font = "30px Arial";
-    ctx.fillText("Hello World", 10, 50);
 
-    const plane = this.$refs.timePlane.three.PlaneGeometry(1,1);
-    console.log("Plane: " + plane);
 
    },
 
@@ -197,7 +172,23 @@ export default {
       this.getScale(image);
       return z;
     },
-  },
+    getTimeline(scene){
+    for(let i = 0; i < this.isBestOfImageFilter.items.length; i++) {
+      const myText = new Text();
+
+      myText.fontSize = 1;
+      myText.color = 0xffffff;
+
+      myText.position.x  = -2;
+      myText.position.y  = 12;
+      myText.position.z = this.isBestOfImageFilter.items[i].coords.z;
+
+      myText.text =this.isBestOfImageFilter.items[i].sortingInfo.year + "---------";
+
+      scene.add(myText);
+    }
+    },
+  }, //MEthods
 };
 
 </script>
