@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "core-js": "^3.8.3",
+    "sass": "^1.52.3",
+    "sass-loader": "^13.0.0",
     "three": "^0.134.0",
     "troika-three-text": "^0.46.4",
     "troisjs": "^0.3.4",

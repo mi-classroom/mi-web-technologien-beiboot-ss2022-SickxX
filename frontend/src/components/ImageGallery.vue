@@ -3,12 +3,12 @@
 <div class="gallery">
 
     <Renderer ref="renderer" resize="window" >
-      <Camera ref="camera" :position="{ x: 0, y:  1, z: 100}"/>
+      <Camera ref="camera" :position="{ x: 0, y:  1.8, z: 50}"/>
     
         <Scene ref="scene" background="#d3d3d3">
           <Box ref="box" v-for="image in isBestOfImageFilter.items"
               :key="image.sortingNumber"
-              :scale="{x: getScaleX(image), y: getScaleY(image), z: getScaleZ(image)}"
+              :scale="{x: getScaleX(image), y: getScaleY(image), z: getScaleZ()}"
               :position="{x:image.coords.x, y:image.coords.y + getScaleY(image)/2 , z: image.coords.z}"
               @click="onEvent(image.sortingNumber)"
               >
@@ -24,6 +24,7 @@
           <BasicMaterial color="#444a47" > </BasicMaterial> </Plane>
         </Scene>
     </Renderer>
+    
 </div>
 
 </template>
@@ -64,6 +65,7 @@ export default {
 
       let filteredImgData = {"items": []};
       filteredImgData = JSON.parse(JSON.stringify(filteredImgData));
+      let gap = 0;
 
       
       for (let i = 0; i < this.imgData.items.length; i++) {
@@ -72,8 +74,7 @@ export default {
         }
       }
       for (let i = 0; i < filteredImgData.items.length; i++) {
-        let zCoord = (-filteredImgData.items[i].sortingInfo.year/1000);
-        let itemPosition = {"x" :  0, "y" :  0, "z" : zCoord };
+        let itemPosition = {"x" :  0, "y" :  0, "z" : 0 };
           filteredImgData.items[i].coords = itemPosition;
       }
 
@@ -85,6 +86,7 @@ export default {
        let firstPosition2 = b.sortingNumber.match(/\w{3}$/gm);
        let secondPosition1 = a.sortingNumber.match(/\w{2}$/gm);
        let secondPosition2 = b.sortingNumber.match(/\w{2}$/gm);
+       
 
         if (Number(year1) === Number(year2)) {
               //Jahr ist bei beiden Items gleich
@@ -108,18 +110,22 @@ export default {
       });
       
       for (let i = 0; i < filteredImgData.items.length -1; i++) {
-        let gap = filteredImgData.items[i].sortingNumber.match(/([0-9]{4})/gm).toString().slice(2);
-        // console.log(" GAP: " + gap);
-        if(Number(filteredImgData.items[i].sortingNumber.match(/([0-9]{4})/gm)) === Number(filteredImgData.items[i+1].sortingNumber.match(/([0-9]{4})/gm))){
-        
-          filteredImgData.items[i+1].coords.x = filteredImgData.items[i].coords.x + 10;
+        let firstIndex = Number(filteredImgData.items[i].sortingNumber.match(/([0-9]{4})/gm));
+        let secondIndex = Number(filteredImgData.items[i+1].sortingNumber.match(/([0-9]{4})/gm));
+
+        if(firstIndex === secondIndex){
+          filteredImgData.items[i+1].coords.x = filteredImgData.items[i].coords.x + 15;
           filteredImgData.items[i+1].coords.z = filteredImgData.items[i].coords.z;
         } 
         else {
-          filteredImgData.items[i+1].coords.z = filteredImgData.items[i+1].coords.z - gap*5;
+          //Abstand soll größer sein, wenn die Jahre weiter als 1 außeinander sind
+            if((secondIndex - firstIndex) < 2) {
+              gap += 10;
+            } else {gap += 20}
+            filteredImgData.items[i+1].coords.z = filteredImgData.items[i+1].coords.z - gap;
         }  
-        // console.log("in isBestOf - X: " + filteredImgData.items[i].coords.x+ " Y: " + filteredImgData.items[i].coords.y + 
-        // " Z: " + filteredImgData.items[i].coords.z + " Img: " + filteredImgData.items[i].sortingInfo.year);
+         console.log("in isBestOf - X: " + filteredImgData.items[i].coords.x+ " Y: " + filteredImgData.items[i].coords.y + 
+         " Z: " + filteredImgData.items[i].coords.z + " Img: " + filteredImgData.items[i].sortingInfo.year + " gap: " + gap);
       }
       console.log(filteredImgData);
       return filteredImgData;
@@ -128,32 +134,16 @@ export default {
   methods: {
   init(){
 
-    // const orbitCtrl = this.$refs.renderer.three.cameraCtrl;
     const scene = this.$refs.scene.scene;
-    // cam.fov = 45;
-    // cam.near = 1;
-    // cam.far = 1000;
-    // cam.updateProjectionMatrix();
-
-    // orbitCtrl.enabled = true;
-    // orbitCtrl.panSpeed = 0.5;
-    // orbitCtrl.rotateSpeed = 0.5;
-    // orbitCtrl.zoomSpeed = 1; //0.03
-    // orbitCtrl.minZoom = 5000;
-
-    // orbitCtrl.update();
-
+    const cam = this.$refs.camera.camera;
     this.velocity = new THREE.Vector3();
     this.direction = new THREE.Vector3();
     this.clock = new THREE.Clock();
-    const cam = this.$refs.camera.camera;
-
     this.controls = new PointerLockControls (cam, document.body);
-    // console.log(controls);
 
-    document.body.addEventListener("click", (event) => {
-            // Left click 
-            if(event.button === 0) {
+    document.body.addEventListener("keypress", (event) => {
+
+        if(event.key === 'Enter') {
                 if(!this.controls.isLocked) {
                     this.controls.lock();
                 }
@@ -222,37 +212,87 @@ export default {
       return (b == 0) ? a : this.gcd (b, a%b);
     },
     getScale(image) {
-      //Hier kommen die Dimensions-Berechnungen hin!
-      //CM into pixel
-      let imgMaxDimWidth = image.images.overall.infos.maxDimensions.width;
-      let imgMaxDimHeight = image.images.overall.infos.maxDimensions.height;
-      // let divisor = this.gcd(imgMaxDimWidth, imgMaxDimHeight);
-      // let aspectRatio = imgMaxDimWidth/imgMaxDimHeight;
+    let imgHeight = 0;
+    let imgMaxDimWidth = image.images.overall.infos.maxDimensions.width;
+    let imgMaxDimHeight = image.images.overall.infos.maxDimensions.height;
+    let aspectRatio = imgMaxDimWidth/imgMaxDimHeight;
+    let pictureScalingFactor = 10;
 
-      //let stringSplit = image.dimensions.replace(/[\])}[{(]/g, ' ').split(' ');
-      // let StringCut = stringSplit.slice();
-      //let stringDigits = image.dimensions.match(/\d/g);
+    const calculateHeight = (element) => {
+    const split = element.dimensions.replace(/[\])}[{(]/g, ' ').split(' ');
+    const scalingFactor = 1 / 1.8;
+    const splitWithoutCM = split.filter(
+          (string) => string !== 'cm' && string !== ''
+          );
+            let size;
+            let sideMeasured;
 
-      // console.log("NEW IMAGE: ");
-      // console.log("getScaleFunc: Width: " + imgMaxDimWidth + " Height: " + imgMaxDimHeight );
-      // console.log("getScaleFunc: Divisor: " + divisor + " AspectRatio: " + aspectRatio );
-      // console.log(image.dimensions); 
+            for (const string of splitWithoutCM) {
+              const stringSlicedAtDash = string.split('-')[0];
 
+              if (!size) {
+                if (/\d/.test(stringSlicedAtDash)) {
+                  size = parseFloat(stringSlicedAtDash.replace(/,/g, '.'));
+                }
+              } else {
+                sideMeasured = stringSlicedAtDash;
 
-      return [imgMaxDimWidth/1000, imgMaxDimHeight/1000];
+                break;
+              }
+            }
+
+            switch (sideMeasured) {
+              case 'oben':
+                size =
+                  (size / element.images.overall.images[0].sizes.medium.dimensions.width) *
+                  element.images.overall.images[0].sizes.medium.dimensions.height;
+
+                break;
+              case 'Durchmesser':
+                /* eslint-disable */
+                const scaledDiameter = Math.sqrt(
+                  Math.pow(
+                    element.images.overall.images[0].sizes.medium.dimensions.width,
+                    2
+                  ) +
+                    Math.pow(
+                      element.images.overall.images[0].sizes.medium.dimensions.height,
+                      2
+                    )
+                );
+
+                const scalingFactor = size / scaledDiameter;
+
+                size =
+                  element.images.overall.images[0].sizes.medium.dimensions.height *
+                  scalingFactor;
+
+                break;
+              default:
+                break;
+            }
+
+            return (size / 100) * scalingFactor;
+          };
+
+      imgHeight = calculateHeight(image);
+
+      console.log("NEW IMAGE: ");
+      console.log(" X: " + (((imgHeight/aspectRatio*pictureScalingFactor)/2)-2) + " Y: " + ((imgHeight/2) *10 +1) + " ratio: " + aspectRatio); 
+      console.log("width: " +  imgMaxDimWidth/1000 + " height: " + imgMaxDimHeight/1000);
+
+      // return [imgMaxDimWidth/1000, imgMaxDimHeight/1000];
+      // return [((imgHeight/aspectRatio*pictureScalingFactor)/2)-2, (imgHeight/2) *10 + 1];
+      return [((imgHeight/aspectRatio*pictureScalingFactor)/2), (imgHeight)*pictureScalingFactor];
     },
     getScaleX(image){
-      // let x = 2;
-      this.getScale(image);
       return this.getScale(image)[0];
     },
     getScaleY(image){
-      // let y = 2;
       return  this.getScale(image)[1];
     },
-    getScaleZ(image){
+    getScaleZ(){
       let z = 0.01;
-      this.getScale(image);
       return z;
     },
     getTimeline(scene){
@@ -263,10 +303,10 @@ export default {
       myText.color = 0xffffff;
 
       myText.position.x  = -10;
-      myText.position.y  = 1;
+      myText.position.y  = 5;
       myText.position.z = this.isBestOfImageFilter.items[i].coords.z;
 
-      myText.text =this.isBestOfImageFilter.items[i].sortingInfo.year + "---------";
+      myText.text ="- " + this.isBestOfImageFilter.items[i].sortingInfo.year + " -";
 
       scene.add(myText);
     }
@@ -283,7 +323,7 @@ export default {
 					this.velocity.z -= this.velocity.z * 10.0 * delta;
 					this.direction.z = Number( this.moveForward ) - Number( this.moveBackward );
 					this.direction.x = Number( this.moveRight ) - Number( this.moveLeft );
-					this.direction.normalize(); // this ensures consistent movements in all directions
+					this.direction.normalize();
 					if ( this.moveForward || this.moveBackward )this. velocity.z -= this.direction.z * 400.0 * delta;
 					if ( this.moveLeft || this.moveRight ) this.velocity.x -= this.direction.x * 400.0 * delta;
 					this.controls.moveRight( - this.velocity.x * delta );
