@@ -17,9 +17,6 @@
             </BasicMaterial>
           </Box>
 
-          <!-- HelperBox -->
-          <Box ref="boxHelper" :position="{x: 0, y: 0 , z: -130}"> <BasicMaterial color="#000000" > </BasicMaterial></Box>
-
           <Plane :height="1600" :width="1300" :rotation="{x: -Math.PI/2, y: 0, z: 0}" :position="{x:30, y: 0, z: -70}" > 
           <BasicMaterial color="#444a47" > </BasicMaterial> </Plane>
         </Scene>
@@ -31,9 +28,6 @@
 
 
 <script>
-//TODO issue4 -> feld im json: references...zugehörige werke, gibt aber noch mehr beziehungstypen
-// Man muss nicht alle 4 typen unbedingt machen, hauptsächlich mal gucken wie das so klappt
-// vllt als caroussel oder so darstellen...mhhhh da hab ich bock meine clickinteraction geht aber auch :> nice
  import imgData from '@/data/cda-paintings-2022-04-22.de.json';
  import * as THREE from 'three';
  import {Text} from 'troika-three-text';
@@ -124,8 +118,6 @@ export default {
             } else {gap += 20}
             filteredImgData.items[i+1].coords.z = filteredImgData.items[i+1].coords.z - gap;
         }  
-         console.log("in isBestOf - X: " + filteredImgData.items[i].coords.x+ " Y: " + filteredImgData.items[i].coords.y + 
-         " Z: " + filteredImgData.items[i].coords.z + " Img: " + filteredImgData.items[i].sortingInfo.year + " gap: " + gap);
       }
       console.log(filteredImgData);
       return filteredImgData;
@@ -133,7 +125,6 @@ export default {
   },
   methods: {
   init(){
-
     const scene = this.$refs.scene.scene;
     const cam = this.$refs.camera.camera;
     this.velocity = new THREE.Vector3();
@@ -212,78 +203,78 @@ export default {
       return (b == 0) ? a : this.gcd (b, a%b);
     },
     getScale(image) {
-    let imgHeight = 0;
+    // let imgHeight = 0;
     let imgMaxDimWidth = image.images.overall.infos.maxDimensions.width;
     let imgMaxDimHeight = image.images.overall.infos.maxDimensions.height;
-    let aspectRatio = imgMaxDimWidth/imgMaxDimHeight;
-    let pictureScalingFactor = 10;
+    // let aspectRatio = imgMaxDimWidth/imgMaxDimHeight;
+    // let pictureScalingFactor = 10;
 
-    const calculateHeight = (element) => {
-    const split = element.dimensions.replace(/[\])}[{(]/g, ' ').split(' ');
-    const scalingFactor = 1 / 1.8;
-    const splitWithoutCM = split.filter(
-          (string) => string !== 'cm' && string !== ''
-          );
-            let size;
-            let sideMeasured;
+    // const calculateHeight = (element) => {
+    // const split = element.dimensions.replace(/[\])}[{(]/g, ' ').split(' ');
+    // const scalingFactor = 1 / 1.8;
+    // const splitWithoutCM = split.filter(
+    //       (string) => string !== 'cm' && string !== ''
+    //       );
+    //         let size;
+    //         let sideMeasured;
 
-            for (const string of splitWithoutCM) {
-              const stringSlicedAtDash = string.split('-')[0];
+    //         for (const string of splitWithoutCM) {
+    //           const stringSlicedAtDash = string.split('-')[0];
 
-              if (!size) {
-                if (/\d/.test(stringSlicedAtDash)) {
-                  size = parseFloat(stringSlicedAtDash.replace(/,/g, '.'));
-                }
-              } else {
-                sideMeasured = stringSlicedAtDash;
+    //           if (!size) {
+    //             if (/\d/.test(stringSlicedAtDash)) {
+    //               size = parseFloat(stringSlicedAtDash.replace(/,/g, '.'));
+    //             }
+    //           } else {
+    //             sideMeasured = stringSlicedAtDash;
 
-                break;
-              }
-            }
+    //             break;
+    //           }
+    //         }
 
-            switch (sideMeasured) {
-              case 'oben':
-                size =
-                  (size / element.images.overall.images[0].sizes.medium.dimensions.width) *
-                  element.images.overall.images[0].sizes.medium.dimensions.height;
+    //         switch (sideMeasured) {
+    //           case 'oben':
+    //             size =
+    //               (size / element.images.overall.images[0].sizes.medium.dimensions.width) *
+    //               element.images.overall.images[0].sizes.medium.dimensions.height;
 
-                break;
-              case 'Durchmesser':
-                /* eslint-disable */
-                const scaledDiameter = Math.sqrt(
-                  Math.pow(
-                    element.images.overall.images[0].sizes.medium.dimensions.width,
-                    2
-                  ) +
-                    Math.pow(
-                      element.images.overall.images[0].sizes.medium.dimensions.height,
-                      2
-                    )
-                );
+    //             break;
+    //           case 'Durchmesser':
+    //             /* eslint-disable */
+    //             const scaledDiameter = Math.sqrt(
+    //               Math.pow(
+    //                 element.images.overall.images[0].sizes.medium.dimensions.width,
+    //                 2
+    //               ) +
+    //                 Math.pow(
+    //                   element.images.overall.images[0].sizes.medium.dimensions.height,
+    //                   2
+    //                 )
+    //             );
 
-                const scalingFactor = size / scaledDiameter;
+    //             const scalingFactor = size / scaledDiameter;
 
-                size =
-                  element.images.overall.images[0].sizes.medium.dimensions.height *
-                  scalingFactor;
+    //             size =
+    //               element.images.overall.images[0].sizes.medium.dimensions.height *
+    //               scalingFactor;
 
-                break;
-              default:
-                break;
-            }
+    //             break;
+    //           default:
+    //             break;
+    //         }
 
-            return (size / 100) * scalingFactor;
-          };
+    //         return (size / 100) * scalingFactor;
+    //       };
 
-      imgHeight = calculateHeight(image);
+    //   imgHeight = calculateHeight(image);
 
-      console.log("NEW IMAGE: ");
-      console.log(" X: " + (((imgHeight/aspectRatio*pictureScalingFactor)/2)-2) + " Y: " + ((imgHeight/2) *10 +1) + " ratio: " + aspectRatio); 
-      console.log("width: " +  imgMaxDimWidth/1000 + " height: " + imgMaxDimHeight/1000);
+      // console.log("NEW IMAGE: ");
+      // console.log(" X: " + (((imgHeight/aspectRatio*pictureScalingFactor)/2)-2) + " Y: " + ((imgHeight/2) *10 +1) + " ratio: " + aspectRatio); 
+      // console.log("width: " +  imgMaxDimWidth/1000 + " height: " + imgMaxDimHeight/1000);
 
-      // return [imgMaxDimWidth/1000, imgMaxDimHeight/1000];
+      return [imgMaxDimWidth/1000, imgMaxDimHeight/1000];
       // return [((imgHeight/aspectRatio*pictureScalingFactor)/2)-2, (imgHeight/2) *10 + 1];
-      return [((imgHeight/aspectRatio*pictureScalingFactor)/2), (imgHeight)*pictureScalingFactor];
+      // return [((imgHeight/aspectRatio*pictureScalingFactor)/2), (imgHeight)*pictureScalingFactor];
     },
     getScaleX(image){
       return this.getScale(image)[0];
