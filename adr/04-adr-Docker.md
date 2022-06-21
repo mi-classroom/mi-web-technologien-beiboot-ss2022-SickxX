@@ -20,7 +20,7 @@ Status: [accepted]
   - Vorgabe des Issues ist Docker
 
 - Solution
-  Docker ist eine Plattform, die es ermöglicht Anwendungen in leichtgewichtigen virtuellen Umgebungen, genannt Containern, laufen zu lassen.
+  - Docker ist eine Plattform, die es ermöglicht Anwendungen in leichtgewichtigen virtuellen Umgebungen, genannt Containern, laufen zu lassen.
 
 - Consequences
-  Schnelles Ausführen der zu testenden Anwendung mittels Docker führt zu schnellerem Review-Prozess. Kein Server nötig, lokal ausführbar.
+  - Schnelles Ausführen der zu testenden Anwendung mittels Docker führt zu schnellerem Review-Prozess. Kein Server nötig, lokal ausführbar.
