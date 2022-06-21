@@ -37,7 +37,7 @@ npm run serve
 2. `cd frontend`
 3. Image erstellen mit: `docker build -t <IMAGENAME> . `
 4. Den Container mit dem Image starten: `docker run -p 8080:8080 --rm --name <YOUR-CONTAINERNAME> <IMAGENAME>`
-5. App ist dann im Browser unter [http://localhost:8080](http://localhost:5000) zu finden
+5. App ist dann im Browser unter [http://localhost:8080](http://localhost:8080) zu finden
 
 # Deployment
 Aktuell auf github-pages, da AWS-Kontingent ausgelaufen ist.
