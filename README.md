@@ -40,6 +40,7 @@ npm run serve
 5. App ist dann im Browser unter [http://localhost:8080](http://localhost:8080) zu finden
 
 # Deployment
+Aktuell auf github-pages, da AWS-Kontingent ausgelaufen ist.
 
 Aktuell auf github-pages, da AWS-Kontingent ausgelaufen ist.
 
