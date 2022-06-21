@@ -37,13 +37,17 @@ npm run serve
 2. `cd frontend`
 3. Image erstellen mit: `docker build -t <IMAGENAME> . `
 4. Den Container mit dem Image starten: `docker run -p 8080:8080 --rm --name <YOUR-CONTAINERNAME> <IMAGENAME>`
-5. App ist dann im Browser unter [http://localhost:8080](http://localhost:5000) zu finden
+5. App ist dann im Browser unter [http://localhost:8080](http://localhost:8080) zu finden
 
 # Deployment
 
-[WS-Server](http://ec2-3-70-217-223.eu-central-1.compute.amazonaws.com/)
+Aktuell auf github-pages, da AWS-Kontingent ausgelaufen ist.
 
-Passwortgesichert!
+https://sickxx.github.io/
+
+# Movement
+
+Mit der `Enter` Taste schaltet man in den Bewegungsmodus. Mit den ` W A S D` Tasten kann man gehen und mit der Maus die Perspektive steuern. Für weitere Informationen der Bilder muss man mit der `ESC` Taste aus der Bewegungssteuerung raus und dann auf das Bild klicken. Optimierung ist angedacht.
 
 # Timetracker
 
@@ -53,8 +57,8 @@ Issue 2: 1h
 
 Nachbereitung von Server auf gh-pages: 1h
 
-Issue 3: 40h ++
+Issue 3: 42h
 
-Issue 4: XX
+Issue 4: XXh
 
-Issue 5: XX
+Issue 5: XXh
