@@ -4,38 +4,36 @@
 
     <div class="lightbox-info">
       <div class="lightbox-info-inner">
-
         <p v-if="image.metadata.title"> Titel: {{ image.metadata.title }}</p>
-
-        <p v-if="image.metadata.date">Datierung: {{ image.metadata.date }}</p>
-
+        <p v-if="image.metadata.date"> Datierung: {{ image.metadata.date }}</p>
         <p v-if="image.medium"> Art des Werks: {{ removeParenthesis(image.medium) }}</p>
-
-        <p v-if="image.repository">Besitzer: {{ image.repository }}</p>
-
-        <p v-if="image.involvedPersons[0].name">Künstler: {{ image.involvedPersons[0].name }}</p>
+        <p v-if="image.repository"> Besitzer: {{ image.repository }}</p>
+        <p v-if="image.involvedPersons[0].name"> Künstler: {{ image.involvedPersons[0].name }}</p>
         <p>_________ ISSUE 4 _________</p>
-
-        <!-- new stuff for issue 4 (and 5) -->
-        <p v-if="image.references">THIS Img: {{ image.inventoryNumber }} </p>
-
-        <p v-if="image.references">Art: {{ image.references[0].kind }} -> 
-                  Image-ref: {{ image.references[0].inventoryNumber }} 
-         </p>
-
+        <p v-if="image.inventoryNumber"> THIS Img: {{ image.inventoryNumber }} </p>
+        <p v-if="image.references.length != 0">Referenz: Es gibt Referenzen!</p>
+        <p v-else >Referenz: Es gibt keine Referenzwerke!</p>
       </div>
     </div>
-    <div class="ref-box">
-      <img  v-for="item in image.references"
-              :key="item.inventoryNumber" :src="findReferenceImages(item.inventoryNumber)" />
+
+    <div class="ref-box" v-if="image.references.length != 0">
+      <div class="ref-box-inner" v-for="item in image.references" :key="item.inventoryNumber">
+        <!-- <P>Beziehungstyp:  {{ item.kind }}</P> -->
+        <p>Beziehungstyp: {{ item.text }} </p>
+        <p>InvNumber: {{ item.inventoryNumber }} </p>
+
+        <router-link :to="`/image/${findSortingNumber(item.inventoryNumber)}`">
+        <img :src="findReferenceImages(item.inventoryNumber)" />
+        </router-link>
+
+      </div> 
     </div>
     
   </div>
 </template>
 
 <script>
-// 0 hat keine ref, 2 hat 1 ref, 7 hat 2 ref
-//                                http://localhost:8080/image/1508-008
+// 2refs: http://localhost:8080/image/1508-008    3refs http://localhost:8080/image/1509-006
 import data from '@/data/cda-paintings-2022-04-22.de.json';
 
 export default {
@@ -54,7 +52,7 @@ export default {
   },
   methods: {
     imageUrl(img) {
-      return img.images.overall.images[0].sizes.medium.src;
+      return img.images.overall.images[0].sizes.small.src;
     },
     findReferenceImages(imgReferenceInventoryNumber){
       let path;
@@ -67,7 +65,18 @@ export default {
       });
       return path;
     },
+    findSortingNumber(refInventoryNumber){
+      let sortNumb;
 
+      data.items.forEach(item => {
+        if(item.inventoryNumber.match(refInventoryNumber)){
+          console.log("YES, found it!");
+           console.log("Path: " + item.sortingNumber);
+         sortNumb = item.sortingNumber;
+        }
+      });
+      return sortNumb;
+    },
     closeLightbox() {
       this.$router.push('/');
     },
@@ -91,13 +100,13 @@ export default {
   background-color: rgba(0, 0, 0, 0.8);
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-gap: 2rem;
+  grid-gap: 1rem;
 }
 
 .lightbox img {
   margin: auto;
-  width: 60%;
-  height: 60%;
+  width: auto;
+  height: auto;
   grid-column-start: 1;
 }
 
@@ -112,17 +121,20 @@ export default {
 }
 
 .ref-box {
-  width: 100%;
-  height: 100%;
+  margin: auto;
   background-color: rgba(0, 0, 0, 0.3);
-  display: block;
+  display: flex;
   grid-column-start: 3;
-  
+  color:orange;
 }
-
+.ref-box-inner{
+  width: auto;
+  height: 50%;
+}
 .ref-box img{
   margin: auto;
   width: 50%;
   height: 50%;
 }
+
 </style>
