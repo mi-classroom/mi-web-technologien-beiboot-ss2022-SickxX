@@ -203,6 +203,14 @@ export default {
       return (b == 0) ? a : this.gcd (b, a%b);
     },
     getScale(image) {
+      /** Man muss tatsächlich nur die height berechnen, die width passt sich dann entsprechend an, siehe
+       * .ref-box img{
+            padding: 30px;
+            width: 20%;
+          }
+      * height steht per default auf "auto". Wenn height berechnet ist, 
+      * kann man mit width dann quasi das bild größer/kleiner ziehen, Seitenverhältnis bleibt dann gleich
+      */
     // let imgHeight = 0;
     let imgMaxDimWidth = image.images.overall.infos.maxDimensions.width;
     let imgMaxDimHeight = image.images.overall.infos.maxDimensions.height;
