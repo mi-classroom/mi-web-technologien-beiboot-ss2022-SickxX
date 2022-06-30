@@ -41,6 +41,9 @@ npm run serve
 4. Den Container mit dem Image starten: `docker run -p 8080:8080 --rm --name <YOUR-CONTAINERNAME> <IMAGENAME>`
 5. App ist dann im Browser unter [http://localhost:8080](http://localhost:8080) zu finden
 
+- Oder noch einfacher:
+`docker-compose up` im root-Verzeichnis, statt der build und run commands
+
 # Deployment
 
 Aktuell auf github-pages, da AWS-Kontingent ausgelaufen ist.
