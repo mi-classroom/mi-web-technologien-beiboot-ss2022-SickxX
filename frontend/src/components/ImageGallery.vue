@@ -8,17 +8,14 @@
         <Scene ref="scene" background="#d3d3d3">
           <Box ref="box" v-for="image in isBestOfImageFilter.items"
               :key="image.sortingNumber"
-              :scale="{x: getScaleX(image), y: getScaleY(image), z: getScaleZ()}"
-              :position="{x:image.coords.x, y:image.coords.y + getScaleY(image)/2 , z: image.coords.z}"
+              :scale="{x: getScale(image)[0], y: getScale(image)[1], z: getScaleZ()}"
+              :position="{x:image.coords.x, y:image.coords.y + getScale(image)[1]/2 , z: image.coords.z}"
               @click="onEvent(image.sortingNumber)"
               >
             <BasicMaterial>
               <Texture :src="getSourcePath(image)"/> 
             </BasicMaterial>
           </Box>
-
-          <!-- HelperBox -->
-          <Box ref="boxHelper" :position="{x: 0, y: 0 , z: -130}"> <BasicMaterial color="#000000" > </BasicMaterial></Box>
 
           <Plane :height="1600" :width="1300" :rotation="{x: -Math.PI/2, y: 0, z: 0}" :position="{x:30, y: 0, z: -70}" > 
           <BasicMaterial color="#444a47" > </BasicMaterial> </Plane>
@@ -31,9 +28,6 @@
 
 
 <script>
-//TODO issue4 -> feld im json: references...zugehörige werke, gibt aber noch mehr beziehungstypen
-// Man muss nicht alle 4 typen unbedingt machen, hauptsächlich mal gucken wie das so klappt
-// vllt als caroussel oder so darstellen...mhhhh da hab ich bock meine clickinteraction geht aber auch :> nice
  import imgData from '@/data/cda-paintings-2022-04-22.de.json';
  import * as THREE from 'three';
  import {Text} from 'troika-three-text';
@@ -102,7 +96,9 @@ export default {
                           return secondPosition1 - secondPosition2;
                       } else {
                         //Sonst check auf erste Posi-nummer, welche zweite Posi-nummer enthält
+                        
                         return a.sortingNumber.match(/[-](\d{3})/g).toString().slice(1) - b.sortingNumber.match(/[-](\d{3})/g).toString().slice(1);
+                        
                       }
 
             }
@@ -124,8 +120,6 @@ export default {
             } else {gap += 20}
             filteredImgData.items[i+1].coords.z = filteredImgData.items[i+1].coords.z - gap;
         }  
-         console.log("in isBestOf - X: " + filteredImgData.items[i].coords.x+ " Y: " + filteredImgData.items[i].coords.y + 
-         " Z: " + filteredImgData.items[i].coords.z + " Img: " + filteredImgData.items[i].sortingInfo.year + " gap: " + gap);
       }
       console.log(filteredImgData);
       return filteredImgData;
@@ -196,7 +190,6 @@ export default {
 				document.addEventListener( 'keyup', onKeyUp );
     
     this.getTimeline(scene);
-
   },
     getSourcePath(filteredImage) {
       let proxyServerSubString = "https://lucascranach.org/data-proxy/image.php?subpath=/";
@@ -212,84 +205,29 @@ export default {
       return (b == 0) ? a : this.gcd (b, a%b);
     },
     getScale(image) {
-    let imgHeight = 0;
-    let imgMaxDimWidth = image.images.overall.infos.maxDimensions.width;
-    let imgMaxDimHeight = image.images.overall.infos.maxDimensions.height;
-    let aspectRatio = imgMaxDimWidth/imgMaxDimHeight;
-    let pictureScalingFactor = 10;
+    // image.images.overall.infos.maxDimensions.height
+    // let imgMaxDimWidth =  image.images.overall.images[0].sizes.medium.dimensions.width;
+    // let imgMaxDimHeight = image.images.overall.images[0].sizes.medium.dimensions.height;
+    // let aspectRatio = imgMaxDimWidth/imgMaxDimHeight;
+    let pictureScalingFactor = 20;
+    // const regex = "/[+-]?\d+(\,\d+)?/g";
+    // const pattern = new RegExp(regex);
+    const imageDim = image.dimensions;
+    
 
-    const calculateHeight = (element) => {
-    const split = element.dimensions.replace(/[\])}[{(]/g, ' ').split(' ');
-    const scalingFactor = 1 / 1.8;
-    const splitWithoutCM = split.filter(
-          (string) => string !== 'cm' && string !== ''
-          );
-            let size;
-            let sideMeasured;
-
-            for (const string of splitWithoutCM) {
-              const stringSlicedAtDash = string.split('-')[0];
-
-              if (!size) {
-                if (/\d/.test(stringSlicedAtDash)) {
-                  size = parseFloat(stringSlicedAtDash.replace(/,/g, '.'));
-                }
-              } else {
-                sideMeasured = stringSlicedAtDash;
-
-                break;
-              }
-            }
-
-            switch (sideMeasured) {
-              case 'oben':
-                size =
-                  (size / element.images.overall.images[0].sizes.medium.dimensions.width) *
-                  element.images.overall.images[0].sizes.medium.dimensions.height;
-
-                break;
-              case 'Durchmesser':
-                /* eslint-disable */
-                const scaledDiameter = Math.sqrt(
-                  Math.pow(
-                    element.images.overall.images[0].sizes.medium.dimensions.width,
-                    2
-                  ) +
-                    Math.pow(
-                      element.images.overall.images[0].sizes.medium.dimensions.height,
-                      2
-                    )
-                );
-
-                const scalingFactor = size / scaledDiameter;
-
-                size =
-                  element.images.overall.images[0].sizes.medium.dimensions.height *
-                  scalingFactor;
-
-                break;
-              default:
-                break;
-            }
-
-            return (size / 100) * scalingFactor;
-          };
-
-      imgHeight = calculateHeight(image);
-
-      console.log("NEW IMAGE: ");
-      console.log(" X: " + (((imgHeight/aspectRatio*pictureScalingFactor)/2)-2) + " Y: " + ((imgHeight/2) *10 +1) + " ratio: " + aspectRatio); 
-      console.log("width: " +  imgMaxDimWidth/1000 + " height: " + imgMaxDimHeight/1000);
-
-      // return [imgMaxDimWidth/1000, imgMaxDimHeight/1000];
-      // return [((imgHeight/aspectRatio*pictureScalingFactor)/2)-2, (imgHeight/2) *10 + 1];
-      return [((imgHeight/aspectRatio*pictureScalingFactor)/2), (imgHeight)*pictureScalingFactor];
-    },
-    getScaleX(image){
-      return this.getScale(image)[0];
-    },
-    getScaleY(image){
-      return  this.getScale(image)[1];
+    if (imageDim.includes("Rahmen:")) {
+        return returnInfo(imageDim.match(/Rahmen:.*/gi)[0]);
+    } else {
+        return returnInfo(imageDim);
+    }
+      function returnInfo(infoClean) {
+        console.log("Image: "+ image.metadata.title + " ImageDimText: " + infoClean);
+        let cmSize = String(infoClean).match(/[+-]?\d+(,\d+)?/g).map(function(v) { return Math.abs(parseFloat(v.replace(',', '.'))); }).slice(0, 2);
+        if(imageDim.includes("Durchmesser")){
+          return [cmSize[0]/Math.sqrt(2)/pictureScalingFactor, cmSize[0]/Math.sqrt(2)/pictureScalingFactor];
+        }
+        return [cmSize[1]/pictureScalingFactor, cmSize[0]/pictureScalingFactor];
+      }
     },
     getScaleZ(){
       let z = 0.01;

@@ -19,6 +19,8 @@ das Projekt clonen mit:
 ```sh
 git clone https://github.com/mi-classroom/mi-web-technologien-beiboot-ss2022-SickxX.git
 ```
+
+Im `/src` Ordner muss ein Ordner `/data` erstellt werden und dort das cda-paintings `json` abgelegt werden.
 ## Mit NodeJS und npm
 Die folgenden Befehle für den Development Server ausführen:
 
@@ -40,7 +42,6 @@ npm run serve
 5. App ist dann im Browser unter [http://localhost:8080](http://localhost:8080) zu finden
 
 # Deployment
-Aktuell auf github-pages, da AWS-Kontingent ausgelaufen ist.
 
 Aktuell auf github-pages, da AWS-Kontingent ausgelaufen ist.
 
@@ -58,7 +59,7 @@ Issue 2: 1h
 
 Nachbereitung von Server auf gh-pages: 1h
 
-Issue 3: 42h
+Issue 3: 44h
 
 Issue 4: XXh
 
