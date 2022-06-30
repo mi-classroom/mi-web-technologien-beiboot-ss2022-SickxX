@@ -209,11 +209,8 @@ export default {
     // let imgMaxDimHeight = image.images.overall.images[0].sizes.medium.dimensions.height;
     // let aspectRatio = imgMaxDimWidth/imgMaxDimHeight;
     let pictureScalingFactor = 20;
-    // const regex = "/[+-]?\d+(\,\d+)?/g";
-    // const pattern = new RegExp(regex);
     const imageDim = image.dimensions;
     
-
     if (imageDim.includes("Rahmen:")) {
         return returnInfo(imageDim.match(/Rahmen:.*/gi)[0]);
     } else {
