@@ -64,6 +64,6 @@ Nachbereitung von Server auf gh-pages: 1h
 
 Issue 3: 44h
 
-Issue 4: 7h ++ 
+Issue 4: 7h
 
-Issue 5: XXh
+Issue 5: 1h
