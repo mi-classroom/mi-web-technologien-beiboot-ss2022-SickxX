@@ -126,3 +126,4 @@ data/
 
 #custom
 package-lock.json
+yarn.lock
