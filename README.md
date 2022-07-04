@@ -19,6 +19,8 @@ das Projekt clonen mit:
 ```sh
 git clone https://github.com/mi-classroom/mi-web-technologien-beiboot-ss2022-SickxX.git
 ```
+
+Im `/src` Ordner muss ein Ordner `/data` erstellt werden und dort das cda-paintings `json` abgelegt werden.
 ## Mit NodeJS und npm
 Die folgenden Befehle für den Development Server ausführen:
 
@@ -39,10 +41,18 @@ npm run serve
 4. Den Container mit dem Image starten: `docker run -p 8080:8080 --rm --name <YOUR-CONTAINERNAME> <IMAGENAME>`
 5. App ist dann im Browser unter [http://localhost:8080](http://localhost:8080) zu finden
 
+- Oder noch einfacher:
+`docker-compose up` im root-Verzeichnis, statt der build und run commands
+
 # Deployment
+
 Aktuell auf github-pages, da AWS-Kontingent ausgelaufen ist.
 
 https://sickxx.github.io/
+
+# Movement
+
+Mit der `Enter` Taste schaltet man in den Bewegungsmodus. Mit den ` W A S D` Tasten kann man gehen und mit der Maus die Perspektive steuern. Für weitere Informationen der Bilder muss man mit der `ESC` Taste aus der Bewegungssteuerung raus und dann auf das Bild klicken. Optimierung ist angedacht.
 
 # Timetracker
 
@@ -50,4 +60,10 @@ Issue 1: 36h
 
 Issue 2: 1h
 
-Issue X: Xh
+Nachbereitung von Server auf gh-pages: 1h
+
+Issue 3: 44h
+
+Issue 4: XXh
+
+Issue 5: XXh

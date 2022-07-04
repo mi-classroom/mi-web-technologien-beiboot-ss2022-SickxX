@@ -13,6 +13,8 @@
 
         <p v-if="image.repository">Besitzer: {{ image.repository }}</p>
 
+        <p v-if="image.involvedPersons[0].name">Künstler: {{ image.involvedPersons[0].name }}</p>
+
       </div>
     </div>
   </div>
