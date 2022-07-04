@@ -40,9 +40,18 @@ npm run serve
 3. Image erstellen mit: `docker build -t <IMAGENAME> . `
 4. Den Container mit dem Image starten: `docker run -p 8080:8080 --rm --name <YOUR-CONTAINERNAME> <IMAGENAME>`
 5. App ist dann im Browser unter [http://localhost:8080](http://localhost:8080) zu finden
+<<<<<<< HEAD
+<<<<<<< HEAD
 
 - Oder noch einfacher:
 `docker-compose up` im root-Verzeichnis, statt der build und run commands
+=======
+>>>>>>> main
+=======
+
+- Oder noch einfacher:
+`docker-compose up` im root-Verzeichnis, statt der build und run commands
+>>>>>>> a913f8a4ca13b4578ff7ae837b365367a8ce49f2
 
 # Deployment
 
@@ -64,6 +73,6 @@ Nachbereitung von Server auf gh-pages: 1h
 
 Issue 3: 44h
 
-Issue 4: XXh
+Issue 4: 7h
 
-Issue 5: XXh
+Issue 5: 1h
