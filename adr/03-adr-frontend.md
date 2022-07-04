@@ -13,7 +13,7 @@ Status: [accepted]
 
 - Prologue
 
-  - Es muss eine Entscheidung für ein Frontend-Framework getroffen werden.
+  - Es muss eine Entscheidung für ein Frontend-Framework getroffen werden
 
 - Discussion
 
