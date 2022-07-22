@@ -17,7 +17,7 @@ Status: [accepted]
 
 - Discussion
 
-  - Vorgabe des Issues ist Docker
+  - Vorgabe des Issues ist Docker.
 
 - Solution
   - Docker ist eine Plattform, die es ermöglicht Anwendungen in leichtgewichtigen virtuellen Umgebungen, genannt Containern, laufen zu lassen.
