@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-//import ImageView from '../views/ImageView.vue'
 import ImageComponent from '../components/ImageComponent'
 
 const routes = [
@@ -12,7 +11,7 @@ const routes = [
   {
     path: '/image/:id',
     name: 'image',
-    component: ImageComponent, //ImageView
+    component: ImageComponent,
   },
 ]
 

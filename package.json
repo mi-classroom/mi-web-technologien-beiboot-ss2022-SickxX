@@ -1,0 +1,7 @@
+{
+  "devDependencies": {
+    "@vue/cli-plugin-typescript": "~5.0.0",
+    "sass": "^1.52.3",
+    "sass-loader": "^13.0.0"
+  }
+}
