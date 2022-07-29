@@ -127,5 +127,3 @@ data/
 #custom
 package-lock.json
 yarn.lock
-frontend/yarn.lock
-frontend/package-lock.json

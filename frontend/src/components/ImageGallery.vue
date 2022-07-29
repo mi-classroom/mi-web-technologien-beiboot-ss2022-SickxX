@@ -6,6 +6,15 @@
       <Camera ref="camera" :position="{ x: 0, y:  1.8, z: 50}"/>
     
         <Scene ref="scene" background="#d3d3d3">
+          
+          <div id="info">
+            <p id="info-p">Info</p>
+            <p>press "Enter" to enter movementcontrols</p>
+            <p>move with W,A,S,D and Mouse</p>
+            <p>leave movementcontrols with "ESC"</p>
+            <p>you can klick on the images to get more information, only outside controlmode</p>
+          </div>
+
           <Box ref="box" v-for="image in isBestOfImageFilter.items"
               :key="image.sortingNumber"
               :scale="{x: getScale(image)[0], y: getScale(image)[1], z: getScaleZ()}"
@@ -204,10 +213,6 @@ export default {
       return (b == 0) ? a : this.gcd (b, a%b);
     },
     getScale(image) {
-    // image.images.overall.infos.maxDimensions.height
-    // let imgMaxDimWidth =  image.images.overall.images[0].sizes.medium.dimensions.width;
-    // let imgMaxDimHeight = image.images.overall.images[0].sizes.medium.dimensions.height;
-    // let aspectRatio = imgMaxDimWidth/imgMaxDimHeight;
     let pictureScalingFactor = 20;
     const imageDim = image.dimensions;
     
@@ -217,7 +222,7 @@ export default {
         return returnInfo(imageDim);
     }
       function returnInfo(infoClean) {
-        console.log("Image: "+ image.metadata.title + " ImageDimText: " + infoClean);
+        // console.log("Image: "+ image.metadata.title + " ImageDimText: " + infoClean);
         let cmSize = String(infoClean).match(/[+-]?\d+(,\d+)?/g).map(function(v) { return Math.abs(parseFloat(v.replace(',', '.'))); }).slice(0, 2);
         if(imageDim.includes("Durchmesser")){
           return [cmSize[0]/Math.sqrt(2)/pictureScalingFactor, cmSize[0]/Math.sqrt(2)/pictureScalingFactor];
@@ -270,33 +275,24 @@ export default {
 
 </script>
 
-<style>
-  /* .gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
-    grid-gap: 1rem;
-    max-width: 50rem;
-    margin: 5rem auto;
-    padding: 0 3rem;
-  } */
+<style lang="scss">
+@import "../styles/scss/abstracts/variables.scss";
 
-  /* .gallery-panel img {
-    width: 50%;
-    height: 14vw;
-    object-fit: cover;
-    border-radius: 0.75rem;
-  } */
-
-  /* canvas {
-  display: block;
-  } */
-
-  /* #info {
+  #info {
+  background-color: $medium;
 	position: absolute;
-	top: 100px;
-	width: 100%;
-	text-align: center;
+	top: 10px;
+  left: 30px;
+	width: 40%;
+	text-align: left;
+  font-family: $font-sans-serif;
+  font-size: 14px;
+  color: $darkest;
 	z-index: 100;
 	display:block;
-} */
+  padding: 1px 5px;
+}
+  #info-p {
+    font-size: 18px;
+  }
 </style>
