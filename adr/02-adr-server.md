@@ -24,24 +24,21 @@ CentOS ist der kostenfreie recompile von RHEL. Vor kurzem hat Red Hat jedoch ein
 vorgenommen. CentOS 8.x (aktuellste Version) wird eingestellt und stattdessen wird auf CentOS Stream
 gewechselt. CentOS Stream bekommt vor RHEL Updates/Packete, ist also für RHEL quasi die Beta. Eine Beta
 möchte man als Server produktiv nicht einsetzen. CentOS 7.x wird zwar noch unterstützt, der Support läuft
-aber nur noch bis Ende 2024
+aber nur noch bis Ende 2024.
 
-  - Oracle Linux ist zwar auch frei nutzbar, jedoch steht eben Oracle dahinter und könnte seine Lizenzmodell
-jederzeit ändern, was sie bspw. bei Java zuletzt getan haben
+  - Oracle Linux ist zwar auch frei nutzbar, jedoch steht eben Oracle dahinter und könnte seine Lizenzmodell jederzeit ändern, was sie bspw. bei Java zuletzt getan haben.
 
-  - Debian ist eine der ältesten Distributionen und bietet eine stable-Version für produktive Server an und ist
-kostenfrei
+  - Debian ist eine der ältesten Distributionen und bietet eine stable-Version für produktive Server an und ist kostenfrei.
 
-  - Ubuntu basiert auf Debian, ebenfalls frei verfügbar und bieten die LTS-Versionen (long-term support) an,
-welche für produktive Server empfohlen werden
+  - Ubuntu basiert auf Debian, ebenfalls frei verfügbar und bieten die LTS-Versionen (long-term support) an, welche für produktive Server empfohlen werden.
 
-  - Debian oder Ubuntu würden somit zur Wahl stehen
+  - Debian oder Ubuntu würden somit zur Wahl stehen.
 
 - Solution
-  - Ubuntu, gehostet auf AWS
+  - Ubuntu, gehostet auf AWS.
 
 - Consequences
-  - Langzeit-Support für produktive Server ist mit den entsprechenden LTS Versionen gegeben
+  - Langzeit-Support für produktive Server ist mit den entsprechenden LTS Versionen gegeben.
 
 - Zusatz
-  - Momentan auf Github-pages umgestiegen, da ich auf AWS nicht mehr hosten konnte
+  - Momentan auf Github-pages umgestiegen, da ich auf AWS nicht mehr hosten konnte.
