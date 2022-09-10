@@ -49,13 +49,14 @@
 
 <script>
 import data from '@/data/cda-paintings-2022-04-22.de.json';
-
+ import { camPosi } from './store';
 
 export default {
   name: "ImageComponent",
   data() {
     return {
       data,
+      camPosi,
     };
   },
   computed: {
@@ -73,8 +74,8 @@ export default {
       let path;
       data.items.forEach(item => {
         if(item.inventoryNumber.match(imgReferenceInventoryNumber)){
-          console.log("YES, found it!");
-           console.log("Path: " + item.images.overall.images[0].sizes.xsmall.src);
+          // console.log("YES, found it!");
+          //  console.log("Path: " + item.images.overall.images[0].sizes.xsmall.src);
          path = item.images.overall.images[0].sizes.xsmall.src;
         }
       });
@@ -85,8 +86,8 @@ export default {
 
       data.items.forEach(item => {
         if(item.inventoryNumber.match(refInventoryNumber)){
-          console.log("YES, found it!");
-           console.log("Path: " + item.sortingNumber);
+          // console.log("YES, found it!");
+          //  console.log("Path: " + item.sortingNumber);
          sortNumb = item.sortingNumber;
         }
       });
