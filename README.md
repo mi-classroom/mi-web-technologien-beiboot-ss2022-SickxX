@@ -66,4 +66,4 @@ Issue 3: 44h
 
 Issue 4: 7h
 
-Issue 5: 1h
+Issue 5: 5h

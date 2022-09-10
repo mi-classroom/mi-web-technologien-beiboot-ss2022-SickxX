@@ -1,5 +1,10 @@
 <template>
-  <div class="lightbox" @click.self="closeLightbox">
+  <div class="lightbox">
+    
+    <div >
+      <button class="backToGallery" @click="closeLightbox">Back to Gallery</button>
+    </div>
+
     <div class="imageGrid">
       <h1>Werk</h1>
       <img  :src="imageUrl(image)" />
@@ -74,8 +79,6 @@ export default {
       let path;
       data.items.forEach(item => {
         if(item.inventoryNumber.match(imgReferenceInventoryNumber)){
-          // console.log("YES, found it!");
-          //  console.log("Path: " + item.images.overall.images[0].sizes.xsmall.src);
          path = item.images.overall.images[0].sizes.xsmall.src;
         }
       });
@@ -86,8 +89,6 @@ export default {
 
       data.items.forEach(item => {
         if(item.inventoryNumber.match(refInventoryNumber)){
-          // console.log("YES, found it!");
-          //  console.log("Path: " + item.sortingNumber);
          sortNumb = item.sortingNumber;
         }
       });
@@ -99,7 +100,6 @@ export default {
     removeParenthesis(string){
       let result = string.replace(/(\[.*?\])/gm, ' ');
       let secresult = result.replace(/(\(.*?\))/gm, ' ');
-      console.log(secresult);
       return secresult;
     },
     findURL(invNumb){
@@ -115,6 +115,13 @@ export default {
 // 2refs: /image/1508-008    3refs /image/1509-006   viele /image/1539-012
 @import "../styles/scss/abstracts/variables.scss";
 
+.backToGallery {
+  background-color: $medium;
+  font-family: $font-sans-serif;
+  color: $accent-dark;
+  width: 100px;
+  height: 50px;
+}
 .lightbox {
   position: fixed;
   top: 0;

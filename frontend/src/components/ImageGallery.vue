@@ -61,10 +61,8 @@ export default {
       moveUp: false,
       moveDown: false,
       minY: 1.8,
-      camStateZ: 0,
-      camStateX: 0,
-      camStateY: 0,
       camPosi,
+      requestID: 0,
     };
   },
   mounted() {
@@ -138,36 +136,33 @@ export default {
             filteredImgData.items[i+1].coords.z = filteredImgData.items[i+1].coords.z - gap;
         }
       }
-      console.log(filteredImgData);
+      
       return filteredImgData;
     },
   },
 
   methods: {
   init(){
-    console.log("Initialize scene, cam, controls");
     const scene = this.$refs.scene.scene;
     const cam = this.$refs.camera.camera;
-    //camPosis to find in store.js, so the position in the scene remains, when klicking on image and coming back to gallery
-    //Browserrefresh refreshes everything, including the store.js
-    //TODO: Direction is not yet stored
-    if(camPosi.count > 0) {
-      cam.position.x = this.camPosi.x;
-      cam.position.y = this.camPosi.y;
-      cam.position.z = this.camPosi.z;
-    } else {
-      cam.position.x = 0;
-      cam.position.y = 1.8;
-      cam.position.z = 20;
-    }
-    console.log("Initial camera position: X= " + cam.position.x + " Y= " + cam.position.y + " Z= " + cam.position.z + " ");
 
     this.velocity = new THREE.Vector3();
     this.direction = new THREE.Vector3();
     this.clock = new THREE.Clock();
     this.vector = new THREE.Vector3();
     this.controls = new PointerLockControls (cam, document.body);
-
+    
+    //camPosis to find in store.js, so the position in the scene remains, when klicking on image and coming back to gallery
+    //Browserrefresh refreshes everything, including the store.js
+    if(camPosi.count > 0) {
+      cam.position.x = this.camPosi.x;
+      cam.position.y = this.camPosi.y;
+      cam.position.z = this.camPosi.z;
+    } else {
+      cam.position.y = 1.8;
+      cam.position.z = 20;
+    }
+    
     document.body.addEventListener("keypress", (event) => {
 
         if(event.key === 'Enter') {
@@ -249,11 +244,13 @@ export default {
       this.camPosi.z = camera.position.z;
     },
     onEvent(imgSortNumb) {
-      const cam = this.$refs.camera.camera;
-      this.setState(cam);
+      this.setState(this.$refs.camera.camera);
       this.camPosi.count++;
+      this.stopAnimation();
       this.$router.push('/image/' + imgSortNumb);
-      console.log("States: " + this.camPosi.x + " " + this.camPosi.y + " " + this.camPosi.z + " " + " count: " + this.camPosi.count);
+    },
+    stopAnimation() {
+      cancelAnimationFrame(this.requestID);
     },
     getScale(image) {
     let pictureScalingFactor = 20;
@@ -293,11 +290,8 @@ export default {
     }
     },
     animate() {
-      const renderer = this.$refs.renderer.renderer; //error: read "null", when click on image and router switches to imageComponent
-      const scene = this.$refs.scene.scene;
-      const cam = this.$refs.camera.camera;
 
-      requestAnimationFrame(this.animate);
+      this.requestID = requestAnimationFrame(this.animate);
       if ( this.controls.isLocked === true ) {
 					const delta = this.clock.getDelta();
 					this.velocity.x -= this.velocity.x * 10.0 * delta;
@@ -322,7 +316,6 @@ export default {
 				} else {
         this.velocity.set(0, 0, 0);
       }
-      renderer.render(scene, cam);
     },
       moveUpFunc(distance) {
       const cam = this.$refs.camera.camera;
