@@ -3,9 +3,19 @@
 <div class="gallery">
 
     <Renderer ref="renderer" resize="window" >
-      <Camera ref="camera" :position="{ x: 0, y:  1.8, z: 50}"/>
-    
+      <Camera ref="camera" :fov="75" :aspect="1" :near="1" :far="1000"/>
+
         <Scene ref="scene" background="#d3d3d3">
+
+          <div id="info">
+            <p id="info-p">Info</p>
+            <p>press "Enter" to enter movementcontrols</p>
+            <p>move with "W", "A", "S", "D" and Mouse</p>
+            <p>move up with "Q", down with "E"</p>
+            <p>leave movementcontrols with "ESC"</p>
+            <p>you can klick on the images to get more information, click works only outside movementcontrol-mode</p>
+          </div>
+
           <Box ref="box" v-for="image in isBestOfImageFilter.items"
               :key="image.sortingNumber"
               :scale="{x: getScale(image)[0], y: getScale(image)[1], z: getScaleZ()}"
@@ -13,15 +23,15 @@
               @click="onEvent(image.sortingNumber)"
               >
             <BasicMaterial>
-              <Texture :src="getSourcePath(image)"/> 
+              <Texture :src="getSourcePath(image)"/>
             </BasicMaterial>
           </Box>
 
-          <Plane :height="1600" :width="1300" :rotation="{x: -Math.PI/2, y: 0, z: 0}" :position="{x:30, y: 0, z: -70}" > 
+          <Plane :height="1600" :width="1300" :rotation="{x: -Math.PI/2, y: 0, z: 0}" :position="{x:30, y: 0, z: -70}" >
           <BasicMaterial color="#444a47" > </BasicMaterial> </Plane>
         </Scene>
     </Renderer>
-    
+
 </div>
 
 </template>
@@ -32,6 +42,7 @@
  import * as THREE from 'three';
  import {Text} from 'troika-three-text';
  import { PointerLockControls } from "three/examples/jsm/controls/PointerLockControls";
+ import { camPosi } from './store';
 
 export default {
   name: 'ImageGallery',
@@ -42,16 +53,23 @@ export default {
       clock: null,
       velocity: null,
       direction: null,
+      vector: null,
       moveForward: false,
       moveBackward: false,
       moveLeft: false,
       moveRight: false,
+      moveUp: false,
+      moveDown: false,
+      minY: 1.8,
+      camStateZ: 0,
+      camStateX: 0,
+      camStateY: 0,
+      camPosi,
     };
   },
   mounted() {
     this.init();
     this.animate();
-
    },
 
   computed: {
@@ -61,7 +79,6 @@ export default {
       filteredImgData = JSON.parse(JSON.stringify(filteredImgData));
       let gap = 0;
 
-      
       for (let i = 0; i < this.imgData.items.length; i++) {
         if(this.imgData.items[i].isBestOf) {
           filteredImgData.items.push(this.imgData.items[i]);
@@ -73,38 +90,38 @@ export default {
       }
 
       filteredImgData.items.sort(function(a, b){
-      
+
        let year1 = a.sortingNumber.match(/([0-9]{4})/gm);
        let year2 = b.sortingNumber.match(/([0-9]{4})/gm);
        let firstPosition1 = a.sortingNumber.match(/\w{3}$/gm);
        let firstPosition2 = b.sortingNumber.match(/\w{3}$/gm);
        let secondPosition1 = a.sortingNumber.match(/\w{2}$/gm);
        let secondPosition2 = b.sortingNumber.match(/\w{2}$/gm);
-       
+
 
         if (Number(year1) === Number(year2)) {
               //Jahr ist bei beiden Items gleich
-                if (a.sortingNumber.match(/-\w{3}$/gm) 
+                if (a.sortingNumber.match(/-\w{3}$/gm)
                     && b.sortingNumber.match(/-\w{3}$/gm)) {
                     //check auf die erste Posi-nummer
                     return firstPosition1 - firstPosition2;
-                } 
-                else if (a.sortingNumber.match(/-\w{2}$/gm) 
-                        && b.sortingNumber.match(/-\w{2}$/gm) && a.sortingNumber.match(/[-](\d{3})/g).toString().slice(1) === b.sortingNumber.match(/[-](\d{3})/g).toString().slice(1)) 
+                }
+                else if (a.sortingNumber.match(/-\w{2}$/gm)
+                        && b.sortingNumber.match(/-\w{2}$/gm) && a.sortingNumber.match(/[-](\d{3})/g).toString().slice(1) === b.sortingNumber.match(/[-](\d{3})/g).toString().slice(1))
                          {
                           //Check auf zweite Posi-nummer, wenn erste Posi-nummer gleich ist
                           return secondPosition1 - secondPosition2;
                       } else {
                         //Sonst check auf erste Posi-nummer, welche zweite Posi-nummer enthält
-                        
+
                         return a.sortingNumber.match(/[-](\d{3})/g).toString().slice(1) - b.sortingNumber.match(/[-](\d{3})/g).toString().slice(1);
-                        
+
                       }
 
             }
         return year1 - year2;
       });
-      
+
       for (let i = 0; i < filteredImgData.items.length -1; i++) {
         let firstIndex = Number(filteredImgData.items[i].sortingNumber.match(/([0-9]{4})/gm));
         let secondIndex = Number(filteredImgData.items[i+1].sortingNumber.match(/([0-9]{4})/gm));
@@ -112,26 +129,43 @@ export default {
         if(firstIndex === secondIndex){
           filteredImgData.items[i+1].coords.x = filteredImgData.items[i].coords.x + 15;
           filteredImgData.items[i+1].coords.z = filteredImgData.items[i].coords.z;
-        } 
+        }
         else {
           //Abstand soll größer sein, wenn die Jahre weiter als 1 außeinander sind
             if((secondIndex - firstIndex) < 2) {
               gap += 10;
             } else {gap += 20}
             filteredImgData.items[i+1].coords.z = filteredImgData.items[i+1].coords.z - gap;
-        }  
+        }
       }
       console.log(filteredImgData);
       return filteredImgData;
     },
   },
+
   methods: {
   init(){
+    console.log("Initialize scene, cam, controls");
     const scene = this.$refs.scene.scene;
     const cam = this.$refs.camera.camera;
+    //camPosis to find in store.js, so the position in the scene remains, when klicking on image and coming back to gallery
+    //Browserrefresh refreshes everything, including the store.js
+    //TODO: Direction is not yet stored
+    if(camPosi.count > 0) {
+      cam.position.x = this.camPosi.x;
+      cam.position.y = this.camPosi.y;
+      cam.position.z = this.camPosi.z;
+    } else {
+      cam.position.x = 0;
+      cam.position.y = 1.8;
+      cam.position.z = 20;
+    }
+    console.log("Initial camera position: X= " + cam.position.x + " Y= " + cam.position.y + " Z= " + cam.position.z + " ");
+
     this.velocity = new THREE.Vector3();
     this.direction = new THREE.Vector3();
     this.clock = new THREE.Clock();
+    this.vector = new THREE.Vector3();
     this.controls = new PointerLockControls (cam, document.body);
 
     document.body.addEventListener("keypress", (event) => {
@@ -142,7 +176,7 @@ export default {
                 }
             }
         }, false);
-      
+
       scene.add(this.controls.getObject() );
 
       const onKeyDown = ( event ) => {
@@ -163,6 +197,12 @@ export default {
 						case 'KeyD':
 							this.moveRight = true;
 							break;
+            case 'KeyQ':
+              this.moveUp = true;
+              break;
+            case 'KeyE':
+              this.moveDown = true;
+              break;
 					}
 				};
 				const onKeyUp = ( event ) => {
@@ -183,11 +223,17 @@ export default {
 						case 'KeyD':
 							this.moveRight = false;
 							break;
+            case 'KeyQ':
+              this.moveUp = false;
+              break;
+            case 'KeyE':
+              this.moveDown = false;
+              break;
 					}
 				};
         document.addEventListener( 'keydown', onKeyDown );
 				document.addEventListener( 'keyup', onKeyUp );
-    
+
     this.getTimeline(scene);
   },
     getSourcePath(filteredImage) {
@@ -197,27 +243,28 @@ export default {
       let proxyServerFullString = proxyServerSubString + imgPathString;
       return proxyServerFullString;
     },
-    onEvent(imgSortNumb) {
-      this.$router.push('/image/' + imgSortNumb);
+    setState(camera){
+      this.camPosi.x = camera.position.x;
+      this.camPosi.y = camera.position.y;
+      this.camPosi.z = camera.position.z;
     },
-    gcd (a, b) {
-      return (b == 0) ? a : this.gcd (b, a%b);
+    onEvent(imgSortNumb) {
+      const cam = this.$refs.camera.camera;
+      this.setState(cam);
+      this.camPosi.count++;
+      this.$router.push('/image/' + imgSortNumb);
+      console.log("States: " + this.camPosi.x + " " + this.camPosi.y + " " + this.camPosi.z + " " + " count: " + this.camPosi.count);
     },
     getScale(image) {
-    // image.images.overall.infos.maxDimensions.height
-    // let imgMaxDimWidth =  image.images.overall.images[0].sizes.medium.dimensions.width;
-    // let imgMaxDimHeight = image.images.overall.images[0].sizes.medium.dimensions.height;
-    // let aspectRatio = imgMaxDimWidth/imgMaxDimHeight;
     let pictureScalingFactor = 20;
     const imageDim = image.dimensions;
-    
+
     if (imageDim.includes("Rahmen:")) {
         return returnInfo(imageDim.match(/Rahmen:.*/gi)[0]);
     } else {
         return returnInfo(imageDim);
     }
       function returnInfo(infoClean) {
-        console.log("Image: "+ image.metadata.title + " ImageDimText: " + infoClean);
         let cmSize = String(infoClean).match(/[+-]?\d+(,\d+)?/g).map(function(v) { return Math.abs(parseFloat(v.replace(',', '.'))); }).slice(0, 2);
         if(imageDim.includes("Durchmesser")){
           return [cmSize[0]/Math.sqrt(2)/pictureScalingFactor, cmSize[0]/Math.sqrt(2)/pictureScalingFactor];
@@ -233,10 +280,10 @@ export default {
     for(let i = 0; i < this.isBestOfImageFilter.items.length; i++) {
       const myText = new Text();
 
-      myText.fontSize = 1;
+      myText.fontSize = 2;
       myText.color = 0xffffff;
 
-      myText.position.x  = -10;
+      myText.position.x  = -12;
       myText.position.y  = 5;
       myText.position.z = this.isBestOfImageFilter.items[i].coords.z;
 
@@ -246,57 +293,67 @@ export default {
     }
     },
     animate() {
-      const renderer = this.$refs.renderer.renderer;
-      const cam = this.$refs.camera.camera;
+      const renderer = this.$refs.renderer.renderer; //error: read "null", when click on image and router switches to imageComponent
       const scene = this.$refs.scene.scene;
+      const cam = this.$refs.camera.camera;
 
       requestAnimationFrame(this.animate);
       if ( this.controls.isLocked === true ) {
 					const delta = this.clock.getDelta();
 					this.velocity.x -= this.velocity.x * 10.0 * delta;
+          this.velocity.y -= this.velocity.y * 10.0 * delta;
 					this.velocity.z -= this.velocity.z * 10.0 * delta;
+
 					this.direction.z = Number( this.moveForward ) - Number( this.moveBackward );
 					this.direction.x = Number( this.moveRight ) - Number( this.moveLeft );
+          this.direction.y = Number( this.moveUp ) - Number( this.moveDown );
 					this.direction.normalize();
 					if ( this.moveForward || this.moveBackward )this. velocity.z -= this.direction.z * 400.0 * delta;
 					if ( this.moveLeft || this.moveRight ) this.velocity.x -= this.direction.x * 400.0 * delta;
+          if ( this.moveUp || this.moveDown ) this.velocity.y -= this.direction.y * 400.0 * delta;
 					this.controls.moveRight( - this.velocity.x * delta );
 					this.controls.moveForward( - this.velocity.z * delta );
-				}
+          this.moveUpFunc(-this.velocity.y * delta);
+
+        if (this.controls.getObject().position.y < this.minY) {
+          this.velocity.y = 0;
+          this.controls.getObject().position.y = this.minY;
+        }
+				} else {
+        this.velocity.set(0, 0, 0);
+      }
       renderer.render(scene, cam);
     },
-  }, //MEthods end here
+      moveUpFunc(distance) {
+      const cam = this.$refs.camera.camera;
+      this.vector.setFromMatrixColumn(cam.matrix, 0);
+      this.vector.crossVectors(cam.up, this.vector);
+      cam.position.addScaledVector(cam.up, distance);
+    },
+  }, //Methods end here
 };
 
 </script>
 
-<style>
-  /* .gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
-    grid-gap: 1rem;
-    max-width: 50rem;
-    margin: 5rem auto;
-    padding: 0 3rem;
-  } */
+<style lang="scss">
+@import "../styles/scss/abstracts/variables.scss";
 
-  /* .gallery-panel img {
-    width: 50%;
-    height: 14vw;
-    object-fit: cover;
-    border-radius: 0.75rem;
-  } */
-
-  /* canvas {
-  display: block;
-  } */
-
-  /* #info {
+  #info {
+  background-color: $medium;
 	position: absolute;
-	top: 100px;
-	width: 100%;
-	text-align: center;
+	top: 10px;
+  left: 30px;
+	width: 35%;
+	text-align: left;
+  font-family: $font-sans-serif;
+  font-size: 14px;
+  color: $darkest;
 	z-index: 100;
 	display:block;
-} */
+  padding: 5px 10px;
+}
+  #info-p {
+    font-size: 18px;
+    color: $accent-dark;
+  }
 </style>
