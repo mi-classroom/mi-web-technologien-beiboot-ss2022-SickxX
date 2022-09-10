@@ -22,11 +22,12 @@ Status: [accepted]
   - Vue (3)
   - React
 
-  - Beide bieten eine ähnliche Herangehensweise. Es wird in Komponenten "gedacht" und gearbeitet, Erweiterungen sind unkompliziert implementierbar. Da das Team bereits in Vue gearbeitet hat, ist es sinnvoll dieses Auszuwählen.
+  - Beide bieten eine ähnliche Herangehensweise. Es wird in Komponenten gedacht und gearbeitet, Erweiterungen sind unkompliziert implementierbar. Da ich bereits in Vuejs erste Grundlagenkenntnisse habe, ist die Auswahl für mich sinnvoll.
+  - Im Rahmen des Moduls Webtechnologien möchte ich gerne meine Frontendkenntnisse erweitern, aber es sollte auch in meinen Verfügbaren Zeitrahmen passen.
 
 - Solution
 
-  - Vue 3, da ich mich damit schonmal etwas befasst hatte.
+  - Vuejs v3, da ich mich damit schonmal etwas befasst hatte, die Einarbeitungszeit somit etwas verkürzen kann und dennoch in eine weit verbreitete Technologie einsteigen kann.
 
 - Consequences
-  - Einarbeitungsphase benötigt, daher dauerte das erste Issue etwas länger.
+  - Einarbeitungsphase trotzdem benötigt, daher dauerte das erste Issue etwas länger.
