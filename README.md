@@ -46,7 +46,7 @@ npm run serve
 
 # Deployment
 
-Aktuell auf github-pages, da AWS-Kontingent ausgelaufen ist.
+Aktuell auf github.io, da AWS-Kontingent ausgelaufen ist.
 
 https://sickxx.github.io/
 
