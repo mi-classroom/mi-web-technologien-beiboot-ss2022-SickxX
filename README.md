@@ -52,7 +52,7 @@ https://sickxx.github.io/
 
 # Movement
 
-Mit der `Enter` Taste wird in den Bewegungsmodus geschaltet. Mit den ` W A S D` Tasten wird sich bewegt, mit ` Q und E` ist das "fliegen" im Raum möglich und mit der Maus kann sich umgeschaut werden. Für weitere Informationen der Bilder über bspw. Referenzbilder, muss mit der `ESC` Taste die Bewegungssteuerung verlassen werden um dann das Bild klicken zu können.
+Mit der `Enter` Taste wird in den Bewegungsmodus geschaltet. Mit den `W A S D` Tasten wird sich bewegt, mit `Q` und `E` ist das "fliegen" im Raum möglich und mit der Maus kann sich umgeschaut werden. Für weitere Informationen der Bilder über bspw. Referenzbilder, muss mit der `ESC` Taste die Bewegungssteuerung verlassen werden um dann das Bild klicken zu können.
 
 # Timetracker
 
