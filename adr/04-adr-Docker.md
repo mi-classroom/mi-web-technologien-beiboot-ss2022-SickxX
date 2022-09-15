@@ -22,7 +22,7 @@ Status: [accepted]
 
 - Solution
   - Docker ist eine Plattform, die es ermöglicht Anwendungen in leichtgewichtigen virtuellen Umgebungen, genannt Containern, laufen zu lassen.
-  -docker-compose als zusatz.
+  -docker-compose als zusatz installiert, um mit dem einfachen Kommando aufrufen zu können.
 
 - Consequences
   - Schnelles Ausführen der zu testenden Anwendung mittels Docker führt zu schnellerem Review-Prozess. Kein Server nötig, lokal ausführbar.

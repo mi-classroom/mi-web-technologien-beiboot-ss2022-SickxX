@@ -41,4 +41,5 @@ aber nur noch bis Ende 2024.
   - Langzeit-Support für produktive Server ist mit den entsprechenden LTS Versionen gegeben.
 
 - Zusatz
-  - Momentan auf Github-pages umgestiegen, da ich auf AWS nicht mehr hosten konnte.
+  - Die App ist auf Github.io umgesiedelt, da ich auf AWS nicht mehr hosten konnte bzw. wollte. Das Kostenlose Kontingent ist abgelaufen.
+  - Github.io wurde zuvor schon in Projekt 3 für die Veröffentlichung genutzt und ist, um schnell weiter deployn zu können, die nächst beste Lösung gewesen.

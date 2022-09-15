@@ -46,17 +46,17 @@ npm run serve
 
 # Deployment
 
-Aktuell auf github-pages, da AWS-Kontingent ausgelaufen ist.
+Aktuell auf github.io, da AWS-Kontingent ausgelaufen ist.
 
 https://sickxx.github.io/
 
 # Movement
 
-Mit der `Enter` Taste schaltet man in den Bewegungsmodus. Mit den ` W A S D` Tasten kann man gehen und mit der Maus die Perspektive steuern. Für weitere Informationen der Bilder muss man mit der `ESC` Taste aus der Bewegungssteuerung raus und dann auf das Bild klicken. Optimierung ist angedacht.
+Mit der `Enter` Taste wird in den Bewegungsmodus geschaltet. Mit den `W A S D` Tasten wird sich bewegt, mit `Q` und `E` ist das "fliegen" im Raum möglich und mit der Maus kann sich umgeschaut werden. Für weitere Informationen der Bilder über bspw. Referenzbilder, muss mit der `ESC` Taste die Bewegungssteuerung verlassen werden um dann das Bild klicken zu können.
 
 # Timetracker
 
-Issue 1: 36h 
+Issue 1: 36h
 
 Issue 2: 1h
 
@@ -66,4 +66,4 @@ Issue 3: 44h
 
 Issue 4: 7h
 
-Issue 5: 1h
+Issue 5: 5h

@@ -13,7 +13,7 @@ Status: [accepted]
 
 - Prologue
 
-  - Die Anwendung soll in eine 3D-Anwendung überführt werden, daher ist eine 3D Library für Javascript nötig, welche nach möglichkeit mit dem Vue.js-Framework vereinigt werden kann.
+  - Die Anwendung soll in eine 3D-Anwendung überführt werden, daher ist eine 3D Library für Javascript nötig, welche nach Möglichkeit mit dem Vue.js-Framework vereinigt werden kann.
 
 - Discussion
 
@@ -37,11 +37,11 @@ Status: [accepted]
   - EDIT: Bin auf trois.js umgestiegen, weil vue-gl nach 3 Stunden rumexperimentieren nicht laufen wollte. trois.js war nach 5 Minuten (wirklich!) importiert.
 
 - Consequences
-  - Aktuell ist meine App mit Vue gebaut, daher hoffe ich mit dem wrapper einen einfachen Einstieg in das 3D-Thema zu haben.
+  - Aktuell ist meine App mit Vuejs gebaut, daher hoffe ich mit dem wrapper einen einfachen Einstieg in das 3D-Thema zu haben.
   - ~~Erstmal Einarbeiten und Hands-on, um zu schauen, ob das mit VueGL funktioniert, ansonsten wird nochmal recherchiert.~~
   - Mit trois.js eingearbeitet weil VueGL nicht laufen wollte
     - Mittelmäßige Dokumentation, verweißt öfters direkt zur Doku von [threeJS](https://threejs.org/).
 
 - Review
-  - An einem späteren Zeitpunkt musste ich dann doch threeJS direkt importieren, um bestimmte Funktionen einzubauen, die trois nicht eingebaut hatte.
+  - An einem späteren Zeitpunkt musste ich dann doch threeJS direkt importieren, um bestimmte Funktionen einzubauen, die trois.js nicht eingebaut hatte.
   - Ich würde beim nächsten Bau einder 3D-Anwendung direkt mit three.js oder ähnlichem arbeiten und dann entsprechend zusätzlich benötigte Frameworks dazunehmen, wenn nötig.
