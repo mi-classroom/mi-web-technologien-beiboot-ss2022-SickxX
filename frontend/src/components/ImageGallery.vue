@@ -229,7 +229,7 @@ export default {
         document.addEventListener( 'keydown', onKeyDown );
 				document.addEventListener( 'keyup', onKeyUp );
 
-    this.getTimeline(scene);
+    this.getTimeline(scene); //Timeline string
   },
     getSourcePath(filteredImage) {
       let proxyServerSubString = "https://lucascranach.org/data-proxy/image.php?subpath=/";
@@ -349,4 +349,7 @@ export default {
     font-size: 18px;
     color: $accent-dark;
   }
+  body {
+  overflow: hidden; /* Hide scrollbars */
+}
 </style>
