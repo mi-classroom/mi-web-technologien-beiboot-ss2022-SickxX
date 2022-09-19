@@ -112,7 +112,6 @@ export default {
 </script>
 
 <style lang="scss">
-// 2refs: /image/1508-008    3refs /image/1509-006   viele /image/1539-012
 @import "../styles/scss/abstracts/variables.scss";
 
 .backToGallery {

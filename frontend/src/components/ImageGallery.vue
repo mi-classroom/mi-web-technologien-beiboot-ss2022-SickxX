@@ -86,8 +86,8 @@ export default {
         let itemPosition = {"x" :  0, "y" :  0, "z" : 0 };
           filteredImgData.items[i].coords = itemPosition;
       }
-
       filteredImgData.items.sort(function(a, b){
+        //Sortalgo for the sortingNumber with possible schemes xxxx, xxxx-xxx, xxxx-xxx-xx
 
        let year1 = a.sortingNumber.match(/([0-9]{4})/gm);
        let year2 = b.sortingNumber.match(/([0-9]{4})/gm);
@@ -98,45 +98,43 @@ export default {
 
 
         if (Number(year1) === Number(year2)) {
-              //Jahr ist bei beiden Items gleich
                 if (a.sortingNumber.match(/-\w{3}$/gm)
                     && b.sortingNumber.match(/-\w{3}$/gm)) {
-                    //check auf die erste Posi-nummer
+                    //check on first position with three digits
                     return firstPosition1 - firstPosition2;
                 }
                 else if (a.sortingNumber.match(/-\w{2}$/gm)
                         && b.sortingNumber.match(/-\w{2}$/gm) && a.sortingNumber.match(/[-](\d{3})/g).toString().slice(1) === b.sortingNumber.match(/[-](\d{3})/g).toString().slice(1))
                          {
-                          //Check auf zweite Posi-nummer, wenn erste Posi-nummer gleich ist
+                          //Check second position with 2 digits, if first position is equal
                           return secondPosition1 - secondPosition2;
                       } else {
-                        //Sonst check auf erste Posi-nummer, welche zweite Posi-nummer enthält
-
+                        //otherwise check on first position, in which the String has a two digit attached
                         return a.sortingNumber.match(/[-](\d{3})/g).toString().slice(1) - b.sortingNumber.match(/[-](\d{3})/g).toString().slice(1);
-
                       }
 
             }
         return year1 - year2;
       });
 
+      //This is for the coordiates of the images
       for (let i = 0; i < filteredImgData.items.length -1; i++) {
         let firstIndex = Number(filteredImgData.items[i].sortingNumber.match(/([0-9]{4})/gm));
         let secondIndex = Number(filteredImgData.items[i+1].sortingNumber.match(/([0-9]{4})/gm));
 
         if(firstIndex === secondIndex){
+          //Images with same year appear as neighbors on the same line in x direction
           filteredImgData.items[i+1].coords.x = filteredImgData.items[i].coords.x + 15;
           filteredImgData.items[i+1].coords.z = filteredImgData.items[i].coords.z;
         }
         else {
-          //Abstand soll größer sein, wenn die Jahre weiter als 1 außeinander sind
+          //If the Years between images have bigger gaps then 1 Year, it shoud be a bigger gap in the 3d room in the z direction
             if((secondIndex - firstIndex) < 2) {
               gap += 10;
             } else {gap += 20}
             filteredImgData.items[i+1].coords.z = filteredImgData.items[i+1].coords.z - gap;
         }
       }
-      
       return filteredImgData;
     },
   },
@@ -229,7 +227,7 @@ export default {
         document.addEventListener( 'keydown', onKeyDown );
 				document.addEventListener( 'keyup', onKeyUp );
 
-    this.getTimeline(scene);
+    this.getTimeline(scene); //Timeline string
   },
     getSourcePath(filteredImage) {
       let proxyServerSubString = "https://lucascranach.org/data-proxy/image.php?subpath=/";
@@ -274,6 +272,7 @@ export default {
       return z;
     },
     getTimeline(scene){
+      //Timeline text for the years (from troika plugin)
     for(let i = 0; i < this.isBestOfImageFilter.items.length; i++) {
       const myText = new Text();
 
@@ -302,7 +301,7 @@ export default {
 					this.direction.x = Number( this.moveRight ) - Number( this.moveLeft );
           this.direction.y = Number( this.moveUp ) - Number( this.moveDown );
 					this.direction.normalize();
-					if ( this.moveForward || this.moveBackward )this. velocity.z -= this.direction.z * 400.0 * delta;
+					if ( this.moveForward || this.moveBackward )this.velocity.z -= this.direction.z * 400.0 * delta;
 					if ( this.moveLeft || this.moveRight ) this.velocity.x -= this.direction.x * 400.0 * delta;
           if ( this.moveUp || this.moveDown ) this.velocity.y -= this.direction.y * 400.0 * delta;
 					this.controls.moveRight( - this.velocity.x * delta );
@@ -349,4 +348,14 @@ export default {
     font-size: 18px;
     color: $accent-dark;
   }
+  body {
+  overflow: hidden; /* Hide scrollbars */
+}
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
 </style>
